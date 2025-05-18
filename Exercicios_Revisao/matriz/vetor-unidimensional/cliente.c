@@ -44,7 +44,7 @@ int main(){
 
     transp = transposta(m1);    
     printf("MATRIZ 1 TRANSPOSTA:\n");
-    imprimeMatriz(m1);
+    imprimeMatriz(transp);
     printf("\n");
     
     destroiMatriz(m1);
