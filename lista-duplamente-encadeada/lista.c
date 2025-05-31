@@ -38,15 +38,12 @@ Lista* insereProduto(Lista *l, Produto *p){
     }
 
     Lista *nova = (Lista*) malloc(sizeof(Lista));  
-    nova->prod = l->prod;
-    nova->prox = l->prox;
-    nova->ant = l;
+    nova->prod = p;
+    nova->prox = l;
+    nova->ant = NULL;
+    l->ant = nova;
 
-    l->prod = p;
-    l->prox = nova;
-    l->ant = NULL;
-
-    return l;
+    return nova;
 }
 
 Lista *RetiraProduto(Lista *l, int codigo){
@@ -69,12 +66,11 @@ Lista *RetiraProduto(Lista *l, int codigo){
         return temp;
     }
     
-    
     //caso geral, em que o produto nao e o primeiro da lista 
     while (atual != NULL){
-        
+
         if (getCodigoProduto(atual->prod) == codigo){
-            
+
             //se o produto for o ultimo
             if (atual->prox == NULL){
                 Lista *temp = atual->ant;
@@ -83,7 +79,6 @@ Lista *RetiraProduto(Lista *l, int codigo){
                 temp->prox = NULL;
                 return l;
             }
-            
             Lista *tempAnt = atual->ant;
             Lista *tempProx = atual->prox;
 

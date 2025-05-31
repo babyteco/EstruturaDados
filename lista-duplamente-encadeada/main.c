@@ -31,14 +31,15 @@ int main(){
     imprimeLista(l);
 
     l = RetiraProduto(l, 10);
-    l = RetiraProduto(l, 20);
-    l = RetiraProduto(l, 30);
-    l = RetiraProduto(l, 40);
+    l = RetiraProduto(l, 35);
+    l = RetiraProduto(l, 9);
+    l = RetiraProduto(l, 17);
+    
 
     printf("\nLISTA APOS RETIRADA DOS PRODUTOS\n\n");
     imprimeLista(l);
 
     liberaLista(l);
-
+    printf("fim do programa\n");
     return 0;
 }
