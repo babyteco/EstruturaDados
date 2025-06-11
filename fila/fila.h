@@ -1,0 +1,4 @@
+
+
+
+typedef struct posto Posto;
