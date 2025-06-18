@@ -67,22 +67,26 @@ void comandosTxt(Booked *b){
             adicionaLivroDesejado(leitor, livro);
             break;
         case 3:
+            printf("%s ", getNomeLeitor(buscaLeitor(b->listaLeitores, param1)));
             adicionaRecomendacaoDada(leitor, livro);
             break;
         case 4:
-        //acetar recomendacoes
+            aceitaRecomendacao(b->listaLeitores, param1, param2, param3);
             break;
         case 5:
-        //rejeitar recomendacoes
+            rejeitaRecomendacao(b->listaLeitores, param1, param2, param3);
             break;
         case 6:
-        //descobrir livro em comuns entre leitores
+            //1 se tiver, 0 se nao tiver
+            livrosEmComum(b->listaLeitores, param1, param3);
             break;
-        case 7:
-        //verificar afinidade
+            case 7:
+            //1 se tiver, 0 se nao tiver
+            preencheListaAfinidadesDiretas(b->listaLeitores);
+            verificaSeTemAfinidade(b->listaLeitores, param1, param3);
             break;
         case 8:
-        //imprime booked
+            printf("Imprime toda a BookED\n");
             break;
 
         default:

@@ -19,8 +19,12 @@ ListaLivros *adicionaLivro(ListaLivros *ll, Livro *livro);
 
 void liberaListaLivros(ListaLivros *ll);
 
-ListaLivros retiraLivro(ListaLivros *ll, int id);
+ListaLivros *retiraLivro(ListaLivros *ll, int id);
 
 Livro *buscaLivro(ListaLivros *ll, int id);
+
+int livrosEmComum( ListaLeitores *ll, int id1, int id2);
+
+void imprimeLivrosLidos(ListaLivros *lidos);
 
 #endif

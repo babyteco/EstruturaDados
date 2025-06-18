@@ -24,4 +24,10 @@ void retiraLeitor(ListaLeitores *ll, int id);
 
 Leitor *buscaLeitor(ListaLeitores *ll, int id);
 
+int verificaSeTemComum(Leitor *l1, Leitor *l2);
+
+void preencheListaAfinidadesDiretas(ListaLeitores *l);
+
+int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2);
+
 #endif

@@ -14,7 +14,6 @@ typedef struct celula Celula;
 typedef struct listaListaRecomendacoes{
     Celula *primeiro;
     Celula *ultimo;
-
 } ListaRecomendacoes;
 
 struct celula{
@@ -63,43 +62,41 @@ void liberaListaRecomendacoes(ListaRecomendacoes *lr){
     free(lr);
 }
 
-void retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
+Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
     Celula *nova = lr->primeiro;
 
     for (int i = 0; nova != NULL; i++){
         if (getIdLivro(nova->sugerido) == idLivro && getIdLeitor(nova->remetente) == idRemetente){
             if (lr->primeiro == lr->ultimo){
-                free(lr->primeiro);
                 lr->primeiro = NULL;
                 lr->ultimo = NULL;
-                return lr;
+                return nova->sugerido;
             }
             
             if (nova == lr->primeiro){
                 Celula *cel = lr->primeiro->prox;
-                free(lr->primeiro);
                 lr->primeiro = cel;
                 cel->ant = NULL;
-                return lr;
+                return nova->sugerido;
             }
 
             if (nova == lr->ultimo){
                 Celula *cel = lr->ultimo->ant;
-                free(lr->ultimo);
                 lr->ultimo = cel;
                 cel->prox = NULL;
-                return lr;
+                return nova->sugerido;
             }
             
             Celula *celAnt = nova->ant;
             Celula *celPos = nova->prox;
-            free(nova);
             celAnt->prox = celPos;
             celPos->ant = celAnt;
+            return nova->sugerido;
         }
         nova = nova->prox;
     }
-    return lr;
+
+    return NULL;
 }
 
 Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
@@ -111,4 +108,3 @@ Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
         nova = nova->prox;
     }
 }
-

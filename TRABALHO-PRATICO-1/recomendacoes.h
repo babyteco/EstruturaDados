@@ -10,23 +10,15 @@
 #include "leitor.h"
 #include "livro.h"
 
-typedef struct celula Celula;
-
-typedef struct listaListaRecomendacoes{
-    Celula *primeiro;
-    Celula *ultimo;
-
-} ListaRecomendacoes;
-
+typedef struct listaListaRecomendacoes ListaRecomendacoes;
 
 ListaRecomendacoes *criaListaRecomendacoes();
 
-ListaRecomendacoes *adicionaLeitor(ListaRecomendacoes *ll, Leitor *Leitor);
+ListaRecomendacoes *adicionaRecomendacaoLista(ListaRecomendacoes *lr, Leitor *Leitor, Livro *livro);
 
-void liberaListaRecomendacoes(ListaRecomendacoes *ll);
+Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
-void retiraLeitor(ListaRecomendacoes *ll, int id);
+Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
-Leitor *buscaLeitor(ListaRecomendacoes *ll, Leitor *l, int id);
 
 #endif

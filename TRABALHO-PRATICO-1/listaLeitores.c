@@ -10,6 +10,7 @@
 #include "listaLivros.h"
 #include "livro.h"
 #include "leitor.h"
+#include "recomendacoes.h"
 
 typedef struct celula Celula;
 
@@ -110,4 +111,75 @@ Leitor *buscaLeitor(ListaLeitores *ll, int id){
         }
         temp = temp->prox;
     }
+}
+
+void preencheListaAfinidadesDiretas(ListaLeitores *l){
+    Celula *temp = l->primeiro;
+    while (temp != NULL){
+        Celula *candidato = l->primeiro;
+        while (candidato != NULL){
+            adicionaNaListaSeTiverAfinidade(temp->leitor, candidato->leitor);
+            candidato = candidato->prox;
+        }
+        temp = temp->prox;
+    }
+}
+
+int verificaSeTemComum(Leitor *l1, Leitor *l2){   
+    if (l1 == l2){
+        return 0;
+    }
+    
+    
+    char **listaGeneros1 = getListaGeneros(l1);
+    char **listaGeneros2 = getListaGeneros(l2);
+    int qtd1 = getNumGeneros(l1);
+    int qtd2 = getNumGeneros(l2);
+    
+    for (int i = 0; i < qtd1; i++){
+        for (int j = 0; j < qtd2; j++){
+            if (strcmp(listaGeneros1[i], listaGeneros2[j]) == 0){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
+    Leitor *l1 = buscaLeitor(ll, id1);
+    Leitor *l2 = buscaLeitor(ll, id2);
+    
+    ListaLeitores *afinidadesPrimarias = getListaAfinidade(l1);
+    
+    Celula *temp = afinidadesPrimarias->primeiro;
+    while (temp != NULL){
+        if (temp->leitor == l2){
+            return 1;
+        }
+        
+        ListaLeitores *afinidadesSecundarias = getListaAfinidade(temp->leitor);
+        Celula *temp2 = afinidadesSecundarias->primeiro;
+        while (temp2 != NULL){
+            if (temp2->leitor == l2){
+                return 1;
+            }
+            temp2 = temp2->prox;
+        }
+        temp = temp->prox;
+    }
+    return 0;
+}   
+
+
+void imprimeLeitores(ListaLeitores *ll){
+    Celula *temp = ll->primeiro;
+
+    printf("Leitor: %s\n", getNomeLeitor(temp->leitor));
+    printf("Lidos: ");
+    imprimeListaLidos(temp->leitor);
+    printf("Desejados: ");
+    imprimeListaDesejados(temp->leitor);
+    printf("Recomendacoes: \n");
+    printf("Afinidades: \n");
 }

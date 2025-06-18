@@ -8,6 +8,7 @@
 #define leitor_h
 #include <stdio.h>
 #include "livro.h"
+#include "listaLeitores.h"
 
 #define MAX_TAM_STRING 50
 
@@ -21,10 +22,32 @@ int getIdLeitor(Leitor *l);
 
 char *getNomeLeitor(Leitor *l);
 
-void *adicionaLivroLido(Leitor *leitor, Livro *livro);
+void adicionaLivroLido(Leitor *leitor, Livro *livro);
 
-void *adicionaLivroDesejado(Leitor *leitor, Livro *livro);
+void adicionaLivroDesejado(Leitor *leitor, Livro *livro);
 
-void *adicionaRecomendacaoDada(Leitor *leitor, Livro *livro);
+void adicionaRecomendacaoDada(Leitor *leitor, Livro *livro);
+
+void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente);
+
+void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente);
+
+ListaLivros *getListaLidosDeUmLeitor(Leitor *l);
+
+ListaLivros *getListaDesejadosDeUmLeitor(Leitor *l);
+
+ListaRecomendacoes *getListaRecomendacoesDeUmLeitor(Leitor *l);
+
+char **getListaGeneros(Leitor *l);
+
+int getNumGeneros(Leitor *l);
+
+void adicionaNaListaSeTiverAfinidade(Leitor *leitorPrincipal, Leitor *candidato);
+
+ListaLeitores *getListaAfinidade(Leitor *l);
+
+void imprimeListaLidos(Leitor *l);
+
+void imprimeListaDesejados(Leitor *l);
 
 #endif

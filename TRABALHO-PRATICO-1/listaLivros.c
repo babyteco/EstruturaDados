@@ -9,6 +9,7 @@
 #include <string.h>
 #include "listaLivros.h"
 #include "livro.h"
+#include "leitor.h"
 
 typedef struct celula Celula;
 
@@ -109,4 +110,40 @@ Livro *buscaLivro(ListaLivros *ll, int id){
         }
         temp = temp->prox;
     }
+    return NULL;
+}
+
+int livrosEmComum( ListaLeitores *ll, int id1, int id2){
+    ListaLivros *l1 = getListaLidosDeUmLeitor(buscaLeitor(ll, id1));
+    ListaLivros *l2 = getListaLidosDeUmLeitor(buscaLeitor(ll, id2));
+    int flag = 0;
+    printf("Livros em comum entre %s e %s: ", getNomeLeitor(buscaLeitor(ll, id1)), getNomeLeitor(buscaLeitor(ll, id2)));
+
+    Celula *primeiraLista = l1;
+    while (primeiraLista->prox != NULL){
+        Celula *segundaLista = l2;
+        while (segundaLista != NULL){
+            if (getIdLivro(primeiraLista->livro) == getIdLivro(segundaLista->livro)){
+                printf("%s, ", getTituloLivro(primeiraLista->livro));
+                flag = 1;
+            }
+            segundaLista = segundaLista->prox;
+        }
+        primeiraLista = primeiraLista->prox;        
+    }
+    if (flag == 1){
+        return 1;
+    }
+    printf("Nenhum livro em comum\n");
+    return 0;
+}
+
+void imprimeLivrosLidos(ListaLivros *lidos){
+    Celula *temp = lidos->primeiro;
+
+    while (temp != NULL){
+        printf("%s ", getTituloLivro(temp->livro));
+        temp = temp->prox;
+    }
+    printf("\n");
 }
