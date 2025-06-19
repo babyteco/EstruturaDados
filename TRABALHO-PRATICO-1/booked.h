@@ -21,4 +21,6 @@ void leLeitoresTxt(Booked *b);
 
 void comandosTxt(Booked *b);
 
+void liberaBooked(Booked *b);
+
 #endif

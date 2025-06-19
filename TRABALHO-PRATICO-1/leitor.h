@@ -10,6 +10,7 @@
 #include "livro.h"
 #include "listaLivros.h"
 #include "listaLeitores.h"
+#include "recomendacoes.h"
 
 #define MAX_TAM_STRING 50
 

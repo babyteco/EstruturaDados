@@ -8,6 +8,7 @@
 #define ListaLivros_h
 #include <stdio.h>
 #include "livro.h"
+#include "listaLeitores.h"
 
 #define MAX_TAM_STRING 50
 
@@ -23,7 +24,7 @@ ListaLivros *retiraLivro(ListaLivros *ll, int id);
 
 Livro *buscaLivro(ListaLivros *ll, int id);
 
-int livrosEmComum( ListaLeitores *ll, int id1, int id2);
+int livrosEmComum(ListaLeitores *ll, int id1, int id2);
 
 void imprimeLivrosLidos(ListaLivros *lidos);
 

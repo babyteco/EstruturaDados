@@ -24,7 +24,7 @@ typedef struct leitor{
     ListaLeitores *afinidades;
 } Leitor;
 
-Leitor *criaLeitor(char nome, char **generos, int id, int numAfinidades){
+Leitor *criaLeitor(char *nome, char **generos, int id, int numAfinidades){
     Leitor *l = (Leitor*) malloc(sizeof(Leitor));
     strcpy(l->nome, nome);
     l->id = id;

@@ -5,9 +5,13 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "listaLeitores.h"
 #include "listaLivros.h"
 #include "recomendacoes.h"
+#include "leitor.h"
+#include "livro.h"
+#include "booked.h"
 
 typedef struct booked{
     ListaLeitores *listaLeitores;
