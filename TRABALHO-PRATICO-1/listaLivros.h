@@ -4,13 +4,12 @@
 //  Created by Matheus Gon Zortea on 16/06/2025.
 //
 
-#ifndef ListaLivros_h
-#define ListaLivros_h
+#ifndef LISTA_LIVROS_H 
+#define LISTA_LIVROS_H
 #include <stdio.h>
 #include "livro.h"
+typedef struct listaLeitores ListaLeitores;
 #include "listaLeitores.h"
-
-#define MAX_TAM_STRING 50
 
 typedef struct listaLivros ListaLivros;
 

@@ -8,7 +8,9 @@
 #define livro_h
 #include <stdio.h>
 
+#ifndef MAX_TAM_STRING
 #define MAX_TAM_STRING 50
+#endif
 
 typedef struct livro Livro;
 

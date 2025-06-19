@@ -4,18 +4,16 @@
 //  Created by Matheus Gon Zortea on 16/06/2025.
 //
 
-#ifndef ListaLeitores_h
-#define ListaLeitores_h
+#ifndef LISTA_LEITORES_H 
+#define LISTA_LEITORES_H
 #include <stdio.h>
-#include "leitor.h"
-
-#define MAX_TAM_STRING 50
+typedef struct leitor Leitor;
 
 typedef struct listaLeitores ListaLeitores;
 
 ListaLeitores *criaListaLeitores();
 
-ListaLeitores *adicionaLeitor(ListaLeitores *ll, Leitor *Leitor);
+ListaLeitores *adicionaLeitor(ListaLeitores *ll, Leitor *leitor);
 
 void liberaListaLeitores(ListaLeitores *ll);
 

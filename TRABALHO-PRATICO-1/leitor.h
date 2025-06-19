@@ -8,9 +8,9 @@
 #define leitor_h
 #include <stdio.h>
 #include "livro.h"
-#include "listaLivros.h"
-#include "listaLeitores.h"
-#include "recomendacoes.h"
+typedef struct listaLivros        ListaLivros;
+typedef struct listaLeitores      ListaLeitores;
+typedef struct listaRecomendacoes ListaRecomendacoes;
 
 #define MAX_TAM_STRING 50
 

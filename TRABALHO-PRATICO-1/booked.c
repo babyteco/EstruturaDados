@@ -37,7 +37,7 @@ void leLivrosTxt(Booked *b){
     char genero[MAX_TAM_STRING];
     int ano;
     int id;
-    while (5 == fscanf(arq, "%d;""%49[^;]""%49[^;]""%49[^;]""%d\n", &id, titulo, autor, genero, &ano)){
+    while (fscanf(arq, "%d;%49[^;];%49[^;];%49[^;];%d%*c", &id, titulo, autor, genero, &ano) == 5){
         Livro *l = criaLivro(titulo, autor, genero, ano, id);
         b->catalogoLivros = adicionaLivro(b->catalogoLivros, l);
     }
@@ -54,7 +54,7 @@ void leLeitoresTxt(Booked *b){
     char nome[MAX_TAM_STRING];
     int numAfinidades;
     int id;
-    while (3 == fscanf(arq, "%d;""%49[^;]""%d", &id, nome, &numAfinidades)){
+    while (fscanf(arq, "%d;%49[^;];%d%*c", &id, nome, &numAfinidades) == 3){
         char **generos = (char**) malloc(numAfinidades * sizeof(char*));
         for (int i = 0; i < numAfinidades; i++){
             generos[i] = (char*) malloc(MAX_TAM_STRING * sizeof(char));
@@ -81,7 +81,7 @@ void comandosTxt(Booked *b){
         return;
     }
     int funcionalidade, param1, param2, param3;
-    while (4 == fscanf(arq, "%d;""%d;""%d;""%d;", &funcionalidade, &param1, &param2, &param3)){
+    while (fscanf(arq, "%d;%d;%d;%d%*c", &funcionalidade, &param1, &param2, &param3) == 4){
         Livro *livro = buscaLivro(b->catalogoLivros, param2);
         Leitor *leitor = buscaLeitor(b->listaLeitores, param1);
         if (livro == NULL || leitor == NULL){

@@ -7,8 +7,8 @@
 #ifndef ListaRecomendacoes_h
 #define ListaRecomendacoes_h
 #include <stdio.h>
-#include "leitor.h"
-#include "livro.h"
+typedef struct leitor Leitor;
+typedef struct livro  Livro;
 
 typedef struct listaListaRecomendacoes ListaRecomendacoes;
 
