@@ -58,7 +58,7 @@ void liberaListaLeitores(ListaLeitores *ll){
     for (int i = 0; paliativa!= NULL; i++){
         Celula *temp = paliativa;
         paliativa = paliativa->prox;
-        liberaLivro(temp->leitor);
+        liberaLeitor(temp->leitor);
         free(temp);
     }
     free(ll);
@@ -73,7 +73,7 @@ void retiraLeitor(ListaLeitores *ll, int id){
                 free(ll->primeiro);
                 ll->primeiro = NULL;
                 ll->ultimo = NULL;
-                return ll;
+                return;
             }
             
             if (nova == ll->primeiro){
@@ -81,7 +81,7 @@ void retiraLeitor(ListaLeitores *ll, int id){
                 free(ll->primeiro);
                 ll->primeiro = cel;
                 cel->ant = NULL;
-                return ll;
+                return;
             }
 
             if (nova == ll->ultimo){
@@ -89,7 +89,7 @@ void retiraLeitor(ListaLeitores *ll, int id){
                 free(ll->ultimo);
                 ll->ultimo = cel;
                 cel->prox = NULL;
-                return ll;
+                return;
             }
             
             Celula *celAnt = nova->ant;
@@ -100,17 +100,17 @@ void retiraLeitor(ListaLeitores *ll, int id){
         }
         nova = nova->prox;
     }
-    return ll;
 }
 
 Leitor *buscaLeitor(ListaLeitores *ll, int id){
     Celula *temp = ll->primeiro;
-    while (temp->prox != NULL){
+    while (temp != NULL){
         if (id == getIdLeitor(temp->leitor)){
             return temp->leitor;
         }
         temp = temp->prox;
     }
+    return NULL;
 }
 
 void preencheListaAfinidadesDiretas(ListaLeitores *l){

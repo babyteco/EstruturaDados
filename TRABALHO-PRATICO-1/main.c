@@ -7,5 +7,6 @@ int main(){
     leLivrosTxt(b);
     leLeitoresTxt(b);
     comandosTxt(b);
+    liberaBooked(b);
     return 0;
 }

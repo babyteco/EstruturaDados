@@ -8,7 +8,6 @@
 #define ListaLeitores_h
 #include <stdio.h>
 #include "leitor.h"
-#include "Leitor.h"
 
 #define MAX_TAM_STRING 50
 

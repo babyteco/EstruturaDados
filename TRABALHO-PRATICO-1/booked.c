@@ -23,12 +23,17 @@ Booked *criaBooked(){
 
 void leLivrosTxt(Booked *b){
     FILE *arq = fopen("Livros.txt", "r");
+    if (arq == NULL){
+        printf("Erro ao abrir o arquivo Livros.txt\n");
+        return;
+    }
+    
     char titulo[MAX_TAM_STRING];
     char autor[MAX_TAM_STRING];
     char genero[MAX_TAM_STRING];
     int ano;
     int id;
-    while (fscanf(arq, "%d;""%49[^;]""%49[^;]""%49[^;]""%d\n", &id, titulo, autor, genero, &ano)){
+    while (5 == fscanf(arq, "%d;""%49[^;]""%49[^;]""%49[^;]""%d\n", &id, titulo, autor, genero, &ano)){
         Livro *l = criaLivro(titulo, autor, genero, ano, id);
         b->catalogoLivros = adicionaLivro(b->catalogoLivros, l);
     }
@@ -37,27 +42,49 @@ void leLivrosTxt(Booked *b){
 
 void leLeitoresTxt(Booked *b){
     FILE *arq = fopen("Leitores.txt", "r");
+    if (arq == NULL){
+        printf("Erro ao abrir o arquivo Leitores.txt\n");
+        return;
+    }
+    
     char nome[MAX_TAM_STRING];
-    char **generos;
     int numAfinidades;
     int id;
-    while (fscanf(arq, "%d;""%49[^;]""%d", &id, nome, &numAfinidades)){
+    while (3 == fscanf(arq, "%d;""%49[^;]""%d", &id, nome, &numAfinidades)){
+        char **generos = (char**) malloc(numAfinidades * sizeof(char*));
+        for (int i = 0; i < numAfinidades; i++){
+            generos[i] = (char*) malloc(MAX_TAM_STRING * sizeof(char));
+        }
+
         for (int i = 0; i < numAfinidades; i++){
             fscanf(arq, "%49[^;]", generos[i]);
         }
         Leitor *l = criaLeitor(nome, generos, id, numAfinidades); 
         b->listaLeitores = adicionaLeitor(b->listaLeitores, l);
+        
+        for (int i = 0; i < numAfinidades; i++){
+            free(generos[i]);
+        }
+        free(generos);
     }
     fclose(arq);
 }
 
 void comandosTxt(Booked *b){
     FILE *arq = fopen("Comandos.txt", "r");
+    if (arq == NULL){
+        printf("Erro ao abrir o arquivo Comandos.txt\n");
+        return;
+    }
     int funcionalidade, param1, param2, param3;
-    while (sscanf(arq, "%d;""%d;""%d;""%d;", &funcionalidade, &param1, &param2, &param3)){
+    while (4 == fscanf(arq, "%d;""%d;""%d;""%d;", &funcionalidade, &param1, &param2, &param3)){
         Livro *livro = buscaLivro(b->catalogoLivros, param2);
         Leitor *leitor = buscaLeitor(b->listaLeitores, param1);
-        
+        if (livro == NULL || leitor == NULL){
+            printf("Erro: Livro ou leitor nao encontrado (comandosTxt)\n");
+            continue;
+        }
+
         switch (funcionalidade)
         {
         case 1:
@@ -96,4 +123,8 @@ void comandosTxt(Booked *b){
     fclose(arq);
 }
 
-void liberaBooked(Booked *b);
+void liberaBooked(Booked *b){
+    liberaListaLeitores(b->listaLeitores);
+    liberaListaLivros(b->catalogoLivros);
+    free(b);
+}

@@ -8,13 +8,14 @@
 #define leitor_h
 #include <stdio.h>
 #include "livro.h"
+#include "listaLivros.h"
 #include "listaLeitores.h"
 
 #define MAX_TAM_STRING 50
 
 typedef struct leitor Leitor;
 
-Leitor *criaLeitor(char nome, char generos, int id, int numAfinidades);
+Leitor *criaLeitor(char *nome, char **generos, int id, int numAfinidades);
 
 void liberaLeitor(Leitor *l);
 

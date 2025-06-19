@@ -12,7 +12,7 @@
 
 typedef struct livro Livro;
 
-Livro *criaLivro(char titulo, char autor, char genero, int ano, int id);
+Livro *criaLivro(char *titulo, char *autor, char *genero, int ano, int id);
 
 void liberaLivro(Livro *l);
 

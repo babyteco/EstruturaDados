@@ -104,7 +104,7 @@ ListaLivros *retiraLivro(ListaLivros *ll, int id){
 
 Livro *buscaLivro(ListaLivros *ll, int id){
     Celula *temp = ll->primeiro;
-    while (temp->prox != NULL){
+    while (temp != NULL){
         if (id == getIdLivro(temp->livro)){
             return temp->livro;
         }
@@ -119,9 +119,9 @@ int livrosEmComum( ListaLeitores *ll, int id1, int id2){
     int flag = 0;
     printf("Livros em comum entre %s e %s: ", getNomeLeitor(buscaLeitor(ll, id1)), getNomeLeitor(buscaLeitor(ll, id2)));
 
-    Celula *primeiraLista = l1;
-    while (primeiraLista->prox != NULL){
-        Celula *segundaLista = l2;
+    Celula *primeiraLista = l1->primeiro;
+    while (primeiraLista != NULL){
+        Celula *segundaLista = l2->primeiro;
         while (segundaLista != NULL){
             if (getIdLivro(primeiraLista->livro) == getIdLivro(segundaLista->livro)){
                 printf("%s, ", getTituloLivro(primeiraLista->livro));

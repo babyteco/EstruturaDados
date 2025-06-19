@@ -18,7 +18,7 @@ typedef struct livro{
     int id;
 } Livro;
 
-Livro *criaLivro(char titulo, char autor, char genero, int ano, int id){
+Livro *criaLivro(char *titulo, char *autor, char *genero, int ano, int id){
     Livro *l = (Livro*) malloc(sizeof(Livro));
     strcpy(l->titulo, titulo);
     strcpy(l->autor, autor);
