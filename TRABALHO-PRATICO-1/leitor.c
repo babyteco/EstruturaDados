@@ -88,7 +88,7 @@ void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRe
     if (buscaRecomendacao(leitor->recomendacoes, getIdLivro(livro), idRemetente) == NULL){
         leitor->desejados = adicionaLivro(leitor->desejados, livro);
     }
-    printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
+    // printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
 }
 
 void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente, FILE *saida){

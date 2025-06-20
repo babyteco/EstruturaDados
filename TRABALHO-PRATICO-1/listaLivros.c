@@ -157,10 +157,10 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2, FILE *saida){
         primeiraLista = primeiraLista->prox;        
     }
     if (flag == 1){
-        printf("\n");
+        fprintf(saida, "\n");
         return 1;
     }
-    printf("Nenhum livro em comum\n");
+    fprintf(saida, "Nenhum livro em comum\n");
     return 0;
 }
 

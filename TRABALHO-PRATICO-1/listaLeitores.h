@@ -29,4 +29,6 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2);
 
 void imprimeLeitores(ListaLeitores *ll, FILE *saida);
 
+void imprimeAfinidades(ListaLeitores *afinidades, FILE *saida);
+
 #endif

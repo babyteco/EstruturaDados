@@ -14,7 +14,7 @@ typedef struct listaListaRecomendacoes ListaRecomendacoes;
 
 ListaRecomendacoes *criaListaRecomendacoes();
 
-ListaRecomendacoes *adicionaRecomendacaoLista(ListaRecomendacoes *lr, Leitor *Leitor, Livro *livro);
+ListaRecomendacoes *adicionaRecomendacaoLista(ListaRecomendacoes *lr, Leitor *leitor, Livro *livro);
 
 Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
@@ -22,6 +22,6 @@ Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
 void liberaListaRecomendacoes(ListaRecomendacoes *lr);
 
-void imprimeListaRecomendacoes(Leitor *l, FILE *saida){
+void imprimeListaRecomendacoes(Leitor *l, FILE *saida);
 
 #endif

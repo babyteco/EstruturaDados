@@ -30,11 +30,11 @@ ListaRecomendacoes *criaListaRecomendacoes(){
     return lr;
 }
 
-ListaRecomendacoes *adicionaRecomendacaoLista(ListaRecomendacoes *lr, Leitor *Leitor, Livro *livro){
+ListaRecomendacoes *adicionaRecomendacaoLista(ListaRecomendacoes *lr, Leitor *leitor, Livro *livro){
     Celula *cel = (Celula*) malloc(sizeof(Celula));
-    cel->remetente = Leitor;
+    cel->remetente = leitor;
     cel->sugerido = livro;
-
+    
     if (!(lr->primeiro)){
         lr->primeiro = cel;
         lr->ultimo = cel;
@@ -136,6 +136,11 @@ void imprimeListaRecomendacoes(Leitor *l, FILE *saida){
         return;
     }
 
+    if(temp == NULL){
+        fprintf(saida, "\n");
+        return;
+    }
+
     while (temp != NULL){
         if(temp->prox == NULL){
             fprintf(saida, "%s\n", getTituloLivro(temp->sugerido));
@@ -144,5 +149,4 @@ void imprimeListaRecomendacoes(Leitor *l, FILE *saida){
         }
         temp = temp->prox;
     }
-    printf("\n");  
 }

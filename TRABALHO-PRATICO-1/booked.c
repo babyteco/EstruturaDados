@@ -83,6 +83,7 @@ void leLeitoresTxt(Booked *b){
         free(generos);
     }
     fclose(arq);
+    preencheListaAfinidadesDiretas(b->listaLeitores);
 }
 
 void comandosTxt(Booked *b){
@@ -124,9 +125,13 @@ void comandosTxt(Booked *b){
         case 6:
             //1 se tiver, 0 se nao tiver
             livrosEmComum(b->listaLeitores, param1, param3, saida);
+            break;
         case 7:
-            //1 se tiver, 0 se nao tiver
-            preencheListaAfinidadesDiretas(b->listaLeitores);
+            // for (int i = 1; i < 4; i++){
+            //     fprintf(saida, "\n\n\nConstando afinidades diretas de %s\n", getNomeLeitor(buscaLeitor(b->listaLeitores, i)));
+            //     imprimeLeitores(getListaAfinidade(buscaLeitor(b->listaLeitores, i)), saida);
+            //     fprintf(saida, "acabou a lista de %s\n\n\n", getNomeLeitor(buscaLeitor(b->listaLeitores, i)));
+            // }
             if(verificaSeTemAfinidade(b->listaLeitores, param1, param3) == 1){
                 fprintf(saida, "Existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(buscaLeitor(b->listaLeitores, param3)));
             } else{

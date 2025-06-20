@@ -152,7 +152,7 @@ int verificaSeTemComum(Leitor *l1, Leitor *l2){
             if (strcmp(listaGeneros1[i], listaGeneros2[j]) == 0){
                 return 1;
             }
-        }
+        }    
     }
     return 0;
 }
@@ -204,8 +204,22 @@ void imprimeLeitores(ListaLeitores *ll, FILE *saida){
         imprimeLivrosDesejados(temp->leitor, saida);
         fprintf(saida, "Recomendacoes: ");
         imprimeListaRecomendacoes(temp->leitor, saida);
-        fprintf(saida, "Afinidades: \n");
+        fprintf(saida, "Afinidades: ");
+        imprimeAfinidades(getListaAfinidade(temp->leitor), saida);
         temp = temp->prox;
     }
 
+}
+
+void imprimeAfinidades(ListaLeitores *afinidades, FILE *saida){
+    Celula *temp = afinidades->primeiro;
+    
+    while (temp != NULL){
+        if(temp->prox == NULL){
+            fprintf(saida, "%s\n", getNomeLeitor(temp->leitor));
+        } else{
+            fprintf(saida, "%s, ", getNomeLeitor(temp->leitor));
+        }
+        temp = temp->prox;
+    }
 }
