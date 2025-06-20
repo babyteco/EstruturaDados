@@ -55,11 +55,21 @@ ListaLivros *adicionaLivro(ListaLivros *ll, Livro *livro){
 
 void liberaListaLivros(ListaLivros *ll){
     Celula *paliativa = ll->primeiro;
-    for (int i = 0; paliativa!= NULL; i++){
-        Celula *temp = paliativa;
-        paliativa = paliativa->prox;
-        liberaLivro(temp->livro);
-        free(temp);
+    while(paliativa!= NULL){
+        Celula *temp = paliativa->prox;
+        liberaLivro(paliativa->livro);
+        free(paliativa);
+        paliativa = temp;
+    }
+    free(ll);
+}
+
+void liberaCelulasListaLivros(ListaLivros *ll){
+    Celula *paliativa = ll->primeiro;
+    while(paliativa!= NULL){
+        Celula *temp = paliativa->prox;
+        free(paliativa);
+        paliativa = temp;
     }
     free(ll);
 }
@@ -181,7 +191,6 @@ void imprimeLivrosLidos(Leitor *leitor, FILE *saida){
         }
         temp = temp->prox;
     }
-    printf("\n");
 }
 
 void imprimeLivrosDesejados(Leitor *leitor, FILE *saida){
@@ -201,5 +210,4 @@ void imprimeLivrosDesejados(Leitor *leitor, FILE *saida){
         }
         temp = temp->prox;
     }
-    printf("\n");  
 }

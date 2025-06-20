@@ -74,7 +74,7 @@ void leLeitoresTxt(Booked *b){
         Leitor *l = criaLeitor(nome, generos, id, numAfinidades); 
         if (l != NULL){
             b->listaLeitores = adicionaLeitor(b->listaLeitores, l);
-        } else printf("nao foi possivel criar leitor");
+        } else printf("nao foi possivel criar leitor\n");
         
         //liberar array de generos
         for (int i = 0; i < numAfinidades; i++){
@@ -152,7 +152,7 @@ void comandosTxt(Booked *b){
 }
 
 void liberaBooked(Booked *b){
-    liberaListaLeitores(b->listaLeitores);
     liberaListaLivros(b->catalogoLivros);
+    liberaListaLeitores(b->listaLeitores);
     free(b);
 }

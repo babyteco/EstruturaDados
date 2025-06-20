@@ -65,6 +65,16 @@ void liberaListaLeitores(ListaLeitores *ll){
     free(ll);
 }
 
+void liberaCelulasListaAfinidades(ListaLeitores *ll){
+    Celula *paliativa = ll->primeiro;
+    while(paliativa!= NULL){
+        Celula *temp = paliativa->prox;
+        free(paliativa);
+        paliativa = temp;
+    }
+    free(ll);
+}
+
 void retiraLeitor(ListaLeitores *ll, int id){
     Celula *nova = ll->primeiro;
 

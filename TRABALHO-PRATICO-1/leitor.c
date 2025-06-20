@@ -50,9 +50,10 @@ void liberaLeitor(Leitor *l){
         free(l->generos[i]);
     }
     free(l->generos);
-    liberaListaLivros(l->lidos);
-    liberaListaLivros(l->desejados);
+    liberaCelulasListaLivros(l->lidos);
+    liberaCelulasListaLivros(l->desejados);
     liberaListaRecomendacoes(l->recomendacoes);
+    liberaCelulasListaAfinidades(l->afinidades);
     free(l);
 }
 
@@ -180,14 +181,4 @@ void adicionaNaListaSeTiverAfinidade(Leitor *leitorPrincipal, Leitor *candidato)
     if (verificaSeTemComum(leitorPrincipal, candidato)){
         leitorPrincipal->afinidades = adicionaLeitor(leitorPrincipal->afinidades, candidato);
     }
-}
-
-void imprimeLeitor(Leitor *l){
-    printf("Nome: %s\n", l->nome);
-    printf("Id: %d\n", l->id);
-    printf("NumAfiniades: %d\n", l->numAfinidades);
-    for (int i = 0; i < l->numAfinidades; i++){
-        printf("Afinidade[%d]: %s\n", i, l->generos[i]);
-    }
-    printf("\n");
 }

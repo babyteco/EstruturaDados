@@ -50,7 +50,4 @@ void adicionaNaListaSeTiverAfinidade(Leitor *leitorPrincipal, Leitor *candidato)
 
 ListaLeitores *getListaAfinidade(Leitor *l);
 
-
-void imprimeLeitor(Leitor *l);
-
 #endif

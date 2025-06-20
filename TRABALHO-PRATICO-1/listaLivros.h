@@ -29,4 +29,6 @@ void imprimeLivrosLidos(Leitor *leitor, FILE *saida);
 
 void imprimeLivrosDesejados(Leitor *leitor, FILE *saida);
 
+void liberaCelulasListaLivros(ListaLivros *ll);
+
 #endif

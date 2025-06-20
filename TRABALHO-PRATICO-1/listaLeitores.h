@@ -17,6 +17,8 @@ ListaLeitores *adicionaLeitor(ListaLeitores *ll, Leitor *leitor);
 
 void liberaListaLeitores(ListaLeitores *ll);
 
+void liberaCelulasListaAfinidades(ListaLeitores *ll);
+
 void retiraLeitor(ListaLeitores *ll, int id);
 
 Leitor *buscaLeitor(ListaLeitores *ll, int id);
