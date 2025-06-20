@@ -78,7 +78,12 @@ Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
             if (nova == lr->primeiro){
                 Celula *cel = lr->primeiro->prox;
                 lr->primeiro = cel;
-                cel->ant = NULL;
+                if (cel != NULL) {
+                    cel->ant = NULL;
+                } else {
+                    // Se não há próximo elemento, a lista fica vazia
+                    lr->ultimo = NULL;
+                }
                 Livro *livroRecomendado = nova->sugerido;
                 free(nova);
                 return livroRecomendado;
@@ -87,7 +92,12 @@ Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
             if (nova == lr->ultimo){
                 Celula *cel = lr->ultimo->ant;
                 lr->ultimo = cel;
-                cel->prox = NULL;
+                if (cel != NULL) {
+                    cel->prox = NULL;
+                } else {
+                    // Se não há elemento anterior, a lista fica vazia
+                    lr->primeiro = NULL;
+                }
                 Livro *livroRecomendado = nova->sugerido;
                 free(nova);
                 return livroRecomendado;

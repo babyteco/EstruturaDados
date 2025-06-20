@@ -80,7 +80,12 @@ ListaLivros *retiraLivro(ListaLivros *ll, int id){
                 Celula *cel = ll->primeiro->prox;
                 free(ll->primeiro);
                 ll->primeiro = cel;
-                cel->ant = NULL;
+                if (cel != NULL) {
+                    cel->ant = NULL;
+                } else {
+                    // Se não há próximo elemento, a lista fica vazia
+                    ll->ultimo = NULL;
+                }
                 return ll;
             }
 
@@ -88,7 +93,12 @@ ListaLivros *retiraLivro(ListaLivros *ll, int id){
                 Celula *cel = ll->ultimo->ant;
                 free(ll->ultimo);
                 ll->ultimo = cel;
-                cel->prox = NULL;
+                if (cel != NULL) {
+                    cel->prox = NULL;
+                } else {
+                    // Se não há elemento anterior, a lista fica vazia
+                    ll->primeiro = NULL;
+                }
                 return ll;
             }
             
@@ -115,10 +125,19 @@ Livro *buscaLivro(ListaLivros *ll, int id){
 }
 
 int livrosEmComum(ListaLeitores *ll, int id1, int id2){
-    ListaLivros *l1 = getListaLidosDeUmLeitor(buscaLeitor(ll, id1));
-    ListaLivros *l2 = getListaLidosDeUmLeitor(buscaLeitor(ll, id2));
+    Leitor *leitor1 = buscaLeitor(ll, id1);
+    Leitor *leitor2 = buscaLeitor(ll, id2);
+    
+    // Verificar se os leitores existem
+    if (leitor1 == NULL || leitor2 == NULL){
+        printf("Erro: Leitor não encontrado\n");
+        return 0;
+    }
+    
+    ListaLivros *l1 = getListaLidosDeUmLeitor(leitor1);
+    ListaLivros *l2 = getListaLidosDeUmLeitor(leitor2);
     int flag = 0;
-    printf("Livros em comum entre %s e %s: ", getNomeLeitor(buscaLeitor(ll, id1)), getNomeLeitor(buscaLeitor(ll, id2)));
+    printf("Livros em comum entre %s e %s: ", getNomeLeitor(leitor1), getNomeLeitor(leitor2));
 
     Celula *primeiraLista = l1->primeiro;
     while (primeiraLista != NULL){
@@ -140,6 +159,11 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2){
 }
 
 void imprimeLivrosLidos(ListaLivros *lidos){
+    if (lidos == NULL){
+        printf("Lista de livros vazia\n");
+        return;
+    }
+    
     Celula *temp = lidos->primeiro;
 
     while (temp != NULL){

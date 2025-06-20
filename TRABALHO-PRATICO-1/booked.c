@@ -64,7 +64,7 @@ void leLeitoresTxt(Booked *b){
 
         for (int i = 0; i < numAfinidades; i++) {
             if (i < numAfinidades - 1) {
-                // para todos exceto o último: consome ‘;’ e lê até antes do próximo ‘;’
+                // para todos exceto o último: consome ';' e lê até antes do próximo ';'
                 fscanf(arq, " %49[^;];", generos[i]);
             } else {
                 // último gênero: lê até antes do '\n'
@@ -111,7 +111,11 @@ void comandosTxt(Booked *b){
         case 3:
             printf("%s ", getNomeLeitor(leitor));
             Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
-            adicionaRecomendacaoDada(destinatario, livro);
+            if (destinatario == NULL){
+                printf("Erro: Destinatário não encontrado\n");
+                break;
+            }
+            adicionaRecomendacaoDada(destinatario, livro, leitor);
             break;
         case 4:
             aceitaRecomendacao(b->listaLeitores, param1, param2, param3);

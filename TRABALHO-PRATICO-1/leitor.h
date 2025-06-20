@@ -30,7 +30,7 @@ void adicionaLivroDesejado(Leitor *leitor, Livro *livro);
 
 void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRemetente);
 
-void adicionaRecomendacaoDada(Leitor *leitor, Livro *livro);
+void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente);
 
 void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente);
 

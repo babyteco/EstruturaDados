@@ -79,30 +79,52 @@ void adicionaLivroDesejado(Leitor *leitor, Livro *livro){
 }
 
 void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRemetente){
+    // Verificar se leitor e livro existem
+    if (leitor == NULL || livro == NULL){
+        printf("Erro: Leitor ou livro não encontrado\n");
+        return;
+    }
+    
     printf("toma jack carlaoo\n");
-    printf("aq tbm\n");
     if (buscaRecomendacao(leitor->recomendacoes, getIdLivro(livro), idRemetente) == NULL){
         leitor->desejados = adicionaLivro(leitor->desejados, livro);
-        printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
-    printf("saiu fora jacola\n");
+    printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
 }
 
 
-void adicionaRecomendacaoDada(Leitor *leitor, Livro *livro){
+void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente){
+    // Verificar se leitor e livro existem
+    if (destinatario == NULL || livro == NULL){
+        printf("Erro: Leitor ou livro não encontrado para adicionar recomendacao\n");
+        return;
+    }
+    
     // Livro *livroExistenteNaLista = buscaLivro(leitor->lidos, getIdLivro(livro));
     // imprimeLivro(livro);
-    if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
-        leitor->recomendacoes = adicionaRecomendacaoLista(leitor->recomendacoes, leitor, livro);
-        printf("recomenda \"%s\" para %s\n", getTituloLivro(livro), leitor->nome);
+    if (buscaRecomendacao(destinatario->recomendacoes, getIdLivro(livro), getIdLeitor(remetente)) == NULL){
+        destinatario->recomendacoes = adicionaRecomendacaoLista(destinatario->recomendacoes, remetente, livro);
+        printf("recomenda \"%s\" para %s\n", getTituloLivro(livro), destinatario->nome);
     }
-    // printf("entrou ");
 }
 
 void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente){
     Leitor *leitor = buscaLeitor(ll, idDestinatario);
     Leitor *remetente = buscaLeitor(ll, idRemetente);
+    
+    // Verificar se leitor e remetente existem
+    if (leitor == NULL || remetente == NULL){
+        printf("Erro: Leitor ou remetente não encontrado\n");
+        return;
+    }
+    
     Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);
+    
+    // Verificar se a recomendação foi encontrada
+    if (livro == NULL){
+        printf("Erro: Nao foi possivel aceitar a recomendacao pois ela nao esta na lista\n");
+        return;
+    }
     
     //adiciona livro em desejados apenas se ele ja nao estava la
     if (buscaLivro(leitor->desejados, idLivro) == NULL){
@@ -114,9 +136,22 @@ void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int 
 void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente){
     Leitor *remetente = buscaLeitor(ll, idRemetente);
     Leitor *leitor = buscaLeitor(ll, idDestinatario);
-    Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);    
+    
+    // Verificar se leitor e remetente existem
+    if (leitor == NULL || remetente == NULL){
+        printf("Erro: Leitor ou remetente não encontrado\n");
+        return;
+    }
+    
+    Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);
+    
+    // Verificar se a recomendação foi encontrada
+    if (livro == NULL){
+        printf("Erro: Recomendação não encontrada\n");
+        return;
+    }
+    
     printf("%s rejeita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
-
 }
 
 ListaLivros *getListaLidosDeUmLeitor(Leitor *l){

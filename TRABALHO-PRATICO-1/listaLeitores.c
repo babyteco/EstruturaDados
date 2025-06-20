@@ -81,7 +81,12 @@ void retiraLeitor(ListaLeitores *ll, int id){
                 Celula *cel = ll->primeiro->prox;
                 free(ll->primeiro);
                 ll->primeiro = cel;
-                cel->ant = NULL;
+                if (cel != NULL) {
+                    cel->ant = NULL;
+                } else {
+                    // Se não há próximo elemento, a lista fica vazia
+                    ll->ultimo = NULL;
+                }
                 return;
             }
 
@@ -89,7 +94,12 @@ void retiraLeitor(ListaLeitores *ll, int id){
                 Celula *cel = ll->ultimo->ant;
                 free(ll->ultimo);
                 ll->ultimo = cel;
-                cel->prox = NULL;
+                if (cel != NULL) {
+                    cel->prox = NULL;
+                } else {
+                    // Se não há elemento anterior, a lista fica vazia
+                    ll->primeiro = NULL;
+                }
                 return;
             }
             
@@ -151,6 +161,12 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
     Leitor *l1 = buscaLeitor(ll, id1);
     Leitor *l2 = buscaLeitor(ll, id2);
     
+    // Verificar se os leitores existem
+    if (l1 == NULL || l2 == NULL){
+        printf("Erro: Leitor não encontrado\n");
+        return 0;
+    }
+    
     ListaLeitores *afinidadesPrimarias = getListaAfinidade(l1);
     
     Celula *temp = afinidadesPrimarias->primeiro;
@@ -173,6 +189,11 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
 }   
 
 void imprimeLeitores(ListaLeitores *ll){
+    if (ll == NULL || ll->primeiro == NULL){
+        printf("Lista de leitores vazia\n");
+        return;
+    }
+    
     Celula *temp = ll->primeiro;
 
     printf("Leitor: %s\n", getNomeLeitor(temp->leitor));
