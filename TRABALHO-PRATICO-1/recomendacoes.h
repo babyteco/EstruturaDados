@@ -22,4 +22,6 @@ Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
 void liberaListaRecomendacoes(ListaRecomendacoes *lr);
 
+void imprimeListaRecomendacoes(Leitor *l, FILE *saida){
+
 #endif

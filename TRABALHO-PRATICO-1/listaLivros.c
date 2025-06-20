@@ -124,7 +124,7 @@ Livro *buscaLivro(ListaLivros *ll, int id){
     return NULL;
 }
 
-int livrosEmComum(ListaLeitores *ll, int id1, int id2){
+int livrosEmComum(ListaLeitores *ll, int id1, int id2, FILE *saida){
     Leitor *leitor1 = buscaLeitor(ll, id1);
     Leitor *leitor2 = buscaLeitor(ll, id2);
     
@@ -137,14 +137,19 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2){
     ListaLivros *l1 = getListaLidosDeUmLeitor(leitor1);
     ListaLivros *l2 = getListaLidosDeUmLeitor(leitor2);
     int flag = 0;
-    printf("Livros em comum entre %s e %s: ", getNomeLeitor(leitor1), getNomeLeitor(leitor2));
+    fprintf(saida, "Livros em comum entre %s e %s: ", getNomeLeitor(leitor1), getNomeLeitor(leitor2));
 
     Celula *primeiraLista = l1->primeiro;
     while (primeiraLista != NULL){
         Celula *segundaLista = l2->primeiro;
         while (segundaLista != NULL){
             if (getIdLivro(primeiraLista->livro) == getIdLivro(segundaLista->livro)){
-                printf("%s, ", getTituloLivro(primeiraLista->livro));
+                if (flag == 0){
+                    fprintf(saida, "\"%s\"", getTituloLivro(primeiraLista->livro));
+                } else{ 
+                    fprintf(saida, ", \"%s\" ", getTituloLivro(primeiraLista->livro));
+                }
+                
                 flag = 1;
             }
             segundaLista = segundaLista->prox;
@@ -152,23 +157,49 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2){
         primeiraLista = primeiraLista->prox;        
     }
     if (flag == 1){
+        printf("\n");
         return 1;
     }
     printf("Nenhum livro em comum\n");
     return 0;
 }
 
-void imprimeLivrosLidos(ListaLivros *lidos){
+void imprimeLivrosLidos(Leitor *leitor, FILE *saida){
+    ListaLivros *lidos = getListaLidosDeUmLeitor(leitor);
+    Celula *temp = lidos->primeiro;
+    
     if (lidos == NULL){
         printf("Lista de livros vazia\n");
         return;
     }
-    
-    Celula *temp = lidos->primeiro;
 
     while (temp != NULL){
-        printf("%s ", getTituloLivro(temp->livro));
+        if(temp->prox == NULL){
+            fprintf(saida, "%s\n", getTituloLivro(temp->livro));
+        } else{
+            fprintf(saida, "%s, ", getTituloLivro(temp->livro));
+        }
         temp = temp->prox;
     }
     printf("\n");
+}
+
+void imprimeLivrosDesejados(Leitor *leitor, FILE *saida){
+    ListaLivros *desejados = getListaDesejadosDeUmLeitor(leitor);
+    Celula *temp = desejados->primeiro;
+    
+    if (desejados == NULL){
+        printf("Lista de livros vazia\n");
+        return;
+    }
+
+    while (temp != NULL){
+        if(temp->prox == NULL){
+            fprintf(saida, "%s\n", getTituloLivro(temp->livro));
+        } else{
+            fprintf(saida, "%s, ", getTituloLivro(temp->livro));
+        }
+        temp = temp->prox;
+    }
+    printf("\n");  
 }

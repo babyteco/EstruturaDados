@@ -126,3 +126,23 @@ Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
     }
     return NULL;
 }
+
+void imprimeListaRecomendacoes(Leitor *l, FILE *saida){
+    ListaRecomendacoes *recomendados = getListaRecomendacoesDeUmLeitor(l);
+    Celula *temp = recomendados->primeiro;
+    
+    if (recomendados == NULL){
+        printf("Lista de livros vazia\n");
+        return;
+    }
+
+    while (temp != NULL){
+        if(temp->prox == NULL){
+            fprintf(saida, "%s\n", getTituloLivro(temp->sugerido));
+        } else{
+            fprintf(saida, "%s, ", getTituloLivro(temp->sugerido));
+        }
+        temp = temp->prox;
+    }
+    printf("\n");  
+}

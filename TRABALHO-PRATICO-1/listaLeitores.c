@@ -188,19 +188,24 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
     return 0;
 }   
 
-void imprimeLeitores(ListaLeitores *ll){
+void imprimeLeitores(ListaLeitores *ll, FILE *saida){
     if (ll == NULL || ll->primeiro == NULL){
         printf("Lista de leitores vazia\n");
         return;
     }
     
     Celula *temp = ll->primeiro;
+    
+    while (temp != NULL){
+        fprintf(saida, "\nLeitor: %s\n", getNomeLeitor(temp->leitor));
+        fprintf(saida, "Lidos: ");
+        imprimeLivrosLidos(temp->leitor, saida);
+        fprintf(saida, "Desejados: ");
+        imprimeLivrosDesejados(temp->leitor, saida);
+        fprintf(saida, "Recomendacoes: ");
+        imprimeListaRecomendacoes(temp->leitor, saida);
+        fprintf(saida, "Afinidades: \n");
+        temp = temp->prox;
+    }
 
-    printf("Leitor: %s\n", getNomeLeitor(temp->leitor));
-    printf("Lidos: ");
-    imprimeListaLidos(temp->leitor);
-    printf("Desejados: ");
-    imprimeListaDesejados(temp->leitor);
-    printf("Recomendacoes: \n");
-    printf("Afinidades: \n");
 }

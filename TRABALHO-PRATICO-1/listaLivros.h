@@ -23,8 +23,10 @@ ListaLivros *retiraLivro(ListaLivros *ll, int id);
 
 Livro *buscaLivro(ListaLivros *ll, int id);
 
-int livrosEmComum(ListaLeitores *ll, int id1, int id2);
+int livrosEmComum(ListaLeitores *ll, int id1, int id2, FILE *saida);
 
-void imprimeLivrosLidos(ListaLivros *lidos);
+void imprimeLivrosLidos(Leitor *leitor, FILE *saida);
+
+void imprimeLivrosDesejados(Leitor *leitor, FILE *saida);
 
 #endif

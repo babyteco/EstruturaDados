@@ -24,17 +24,17 @@ int getIdLeitor(Leitor *l);
 
 char *getNomeLeitor(Leitor *l);
 
-void adicionaLivroLido(Leitor *leitor, Livro *livro);
+void adicionaLivroLido(Leitor *leitor, Livro *livro, FILE *saida);
 
-void adicionaLivroDesejado(Leitor *leitor, Livro *livro);
+void adicionaLivroDesejado(Leitor *leitor, Livro *livro, FILE *saida);
 
 void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRemetente);
 
-void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente);
+void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente, FILE *saida);
 
-void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente);
+void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente, FILE *saida);
 
-void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente);
+void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente, FILE *saida);
 
 ListaLivros *getListaLidosDeUmLeitor(Leitor *l);
 
@@ -50,9 +50,6 @@ void adicionaNaListaSeTiverAfinidade(Leitor *leitorPrincipal, Leitor *candidato)
 
 ListaLeitores *getListaAfinidade(Leitor *l);
 
-void imprimeListaLidos(Leitor *l);
-
-void imprimeListaDesejados(Leitor *l);
 
 void imprimeLeitor(Leitor *l);
 

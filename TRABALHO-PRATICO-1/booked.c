@@ -91,49 +91,51 @@ void comandosTxt(Booked *b){
         printf("Erro ao abrir o arquivo Comandos.txt\n");
         return;
     }
+    
+    FILE *saida = fopen("Saida.txt", "w");
     int funcionalidade, param1, param2, param3;
     while (fscanf(arq, "%d;%d;%d;%d%*c", &funcionalidade, &param1, &param2, &param3) == 4){
         Livro *livro = buscaLivro(b->catalogoLivros, param2);
         Leitor *leitor = buscaLeitor(b->listaLeitores, param1);
-        if (livro == NULL || leitor == NULL){
-            printf("Erro: Livro ou leitor nao encontrado (comandosTxt)\n");
-            continue;
-        }
 
         switch (funcionalidade)
         {
         case 1:
-            adicionaLivroLido(leitor, livro);
+            adicionaLivroLido(leitor, livro, saida);
             break;
         case 2:
-            adicionaLivroDesejado(leitor, livro);
+            adicionaLivroDesejado(leitor, livro, saida);
             break;
         case 3:
-            printf("%s ", getNomeLeitor(leitor));
+            fprintf(saida, "%s ", getNomeLeitor(leitor));
             Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
             if (destinatario == NULL){
                 printf("Erro: Destinatário não encontrado\n");
                 break;
             }
-            adicionaRecomendacaoDada(destinatario, livro, leitor);
+            adicionaRecomendacaoDada(destinatario, livro, leitor, saida);
             break;
         case 4:
-            aceitaRecomendacao(b->listaLeitores, param1, param2, param3);
+            aceitaRecomendacao(b->listaLeitores, param1, param2, param3, saida);
             break;
         case 5:
-            rejeitaRecomendacao(b->listaLeitores, param1, param2, param3);
+            rejeitaRecomendacao(b->listaLeitores, param1, param2, param3, saida);
             break;
         case 6:
             //1 se tiver, 0 se nao tiver
-            livrosEmComum(b->listaLeitores, param1, param3);
-            break;
-            case 7:
+            livrosEmComum(b->listaLeitores, param1, param3, saida);
+        case 7:
             //1 se tiver, 0 se nao tiver
             preencheListaAfinidadesDiretas(b->listaLeitores);
-            verificaSeTemAfinidade(b->listaLeitores, param1, param3);
+            if(verificaSeTemAfinidade(b->listaLeitores, param1, param3) == 1){
+                fprintf(saida, "Existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(buscaLeitor(b->listaLeitores, param3)));
+            } else{
+                fprintf(saida, "Nao existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(buscaLeitor(b->listaLeitores, param3)));
+            }
             break;
         case 8:
-            printf("Imprime toda a BookED\n");
+            fprintf(saida, "Imprime toda a BookED\n");
+            imprimeLeitores(b->listaLeitores, saida);
             break;
 
         default:
@@ -141,6 +143,7 @@ void comandosTxt(Booked *b){
         }
     }
     fclose(arq);
+    fclose(saida);
 }
 
 void liberaBooked(Booked *b){

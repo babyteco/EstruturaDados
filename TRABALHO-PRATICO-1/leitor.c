@@ -64,17 +64,17 @@ char *getNomeLeitor(Leitor *l){
     return l->nome;
 }
 
-void adicionaLivroLido(Leitor *leitor, Livro *livro){
+void adicionaLivroLido(Leitor *leitor, Livro *livro, FILE *saida){
     if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
         leitor->lidos = adicionaLivro(leitor->lidos, livro);
-        printf("%s leu \"%s\"\n", leitor->nome, getTituloLivro(livro));
+        fprintf(saida, "%s leu \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
 }
 
-void adicionaLivroDesejado(Leitor *leitor, Livro *livro){
+void adicionaLivroDesejado(Leitor *leitor, Livro *livro, FILE *saida){
     if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
         leitor->desejados = adicionaLivro(leitor->desejados, livro);
-        printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
+        fprintf(saida, "%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
 }
 
@@ -85,15 +85,13 @@ void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRe
         return;
     }
     
-    printf("toma jack carlaoo\n");
     if (buscaRecomendacao(leitor->recomendacoes, getIdLivro(livro), idRemetente) == NULL){
         leitor->desejados = adicionaLivro(leitor->desejados, livro);
     }
     printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
 }
 
-
-void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente){
+void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remetente, FILE *saida){
     // Verificar se leitor e livro existem
     if (destinatario == NULL || livro == NULL){
         printf("Erro: Leitor ou livro não encontrado para adicionar recomendacao\n");
@@ -104,11 +102,11 @@ void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remete
     // imprimeLivro(livro);
     if (buscaRecomendacao(destinatario->recomendacoes, getIdLivro(livro), getIdLeitor(remetente)) == NULL){
         destinatario->recomendacoes = adicionaRecomendacaoLista(destinatario->recomendacoes, remetente, livro);
-        printf("recomenda \"%s\" para %s\n", getTituloLivro(livro), destinatario->nome);
+        fprintf(saida, "recomenda \"%s\" para %s\n", getTituloLivro(livro), destinatario->nome);
     }
 }
 
-void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente){
+void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente, FILE *saida){
     Leitor *leitor = buscaLeitor(ll, idDestinatario);
     Leitor *remetente = buscaLeitor(ll, idRemetente);
     
@@ -129,11 +127,11 @@ void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int 
     //adiciona livro em desejados apenas se ele ja nao estava la
     if (buscaLivro(leitor->desejados, idLivro) == NULL){
         adicionaLivroDesejadoPorRecomendacao(leitor, livro, getIdLeitor(remetente));
-        printf("%s aceita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
+        fprintf(saida, "%s aceita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
     }
 }
 
-void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente){
+void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente, FILE *saida){
     Leitor *remetente = buscaLeitor(ll, idRemetente);
     Leitor *leitor = buscaLeitor(ll, idDestinatario);
     
@@ -151,7 +149,7 @@ void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int
         return;
     }
     
-    printf("%s rejeita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
+    fprintf(saida, "%s rejeita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
 }
 
 ListaLivros *getListaLidosDeUmLeitor(Leitor *l){
@@ -182,14 +180,6 @@ void adicionaNaListaSeTiverAfinidade(Leitor *leitorPrincipal, Leitor *candidato)
     if (verificaSeTemComum(leitorPrincipal, candidato)){
         leitorPrincipal->afinidades = adicionaLeitor(leitorPrincipal->afinidades, candidato);
     }
-}
-
-void imprimeListaLidos(Leitor *l){
-    imprimeLivrosLidos(l->lidos);
-}
-
-void imprimeListaDesejados(Leitor *l){
-    imprimeLivrosLidos(l->desejados);
 }
 
 void imprimeLeitor(Leitor *l){
