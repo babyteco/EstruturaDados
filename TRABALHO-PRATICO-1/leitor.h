@@ -10,7 +10,7 @@
 #include "livro.h"
 typedef struct listaLivros        ListaLivros;
 typedef struct listaLeitores      ListaLeitores;
-typedef struct listaRecomendacoes ListaRecomendacoes;
+typedef struct listaListaRecomendacoes  ListaRecomendacoes;
 
 #define MAX_TAM_STRING 50
 
@@ -27,6 +27,8 @@ char *getNomeLeitor(Leitor *l);
 void adicionaLivroLido(Leitor *leitor, Livro *livro);
 
 void adicionaLivroDesejado(Leitor *leitor, Livro *livro);
+
+void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRemetente);
 
 void adicionaRecomendacaoDada(Leitor *leitor, Livro *livro);
 
@@ -51,5 +53,7 @@ ListaLeitores *getListaAfinidade(Leitor *l);
 void imprimeListaLidos(Leitor *l);
 
 void imprimeListaDesejados(Leitor *l);
+
+void imprimeLeitor(Leitor *l);
 
 #endif

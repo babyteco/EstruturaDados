@@ -4,8 +4,8 @@
 
 int main(){
     Booked *b = criaBooked();
-    leLivrosTxt(b);
     leLeitoresTxt(b);
+    leLivrosTxt(b);
     comandosTxt(b);
     liberaBooked(b);
     return 0;

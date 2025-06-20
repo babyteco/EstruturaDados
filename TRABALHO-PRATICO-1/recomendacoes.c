@@ -66,7 +66,7 @@ Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente){
     Celula *nova = lr->primeiro;
 
     for (int i = 0; nova != NULL; i++){
-        if (getIdLivro(nova->sugerido) == idLivro && getIdLeitor(nova->remetente) == idRemetente){
+        if ((getIdLivro(nova->sugerido) == idLivro) && (getIdLeitor(nova->remetente) == idRemetente)){
             if (lr->primeiro == lr->ultimo){
                 lr->primeiro = NULL;
                 lr->ultimo = NULL;

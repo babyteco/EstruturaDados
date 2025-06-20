@@ -33,11 +33,11 @@ ListaLeitores *criaListaLeitores(){
     return ll;
 }
 
-ListaLeitores *adicionaLeitor(ListaLeitores *ll, Leitor *leitor){
+ListaLeitores *adicionaLeitor(ListaLeitores *ll, Leitor *leitor){ 
     Celula *cel = (Celula*) malloc(sizeof(Celula));
     cel->leitor= leitor;
 
-    if (!(ll->primeiro)){
+    if (ll->primeiro == NULL){
         ll->primeiro = cel;
         ll->ultimo = cel;
         ll->primeiro->prox = NULL;
@@ -50,7 +50,7 @@ ListaLeitores *adicionaLeitor(ListaLeitores *ll, Leitor *leitor){
     ll->ultimo = cel;
     ll->ultimo->prox = NULL;
     ll->ultimo->ant = antigoUltimo;
-
+    
     return ll;
 }
 
@@ -171,7 +171,6 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
     }
     return 0;
 }   
-
 
 void imprimeLeitores(ListaLeitores *ll){
     Celula *temp = ll->primeiro;

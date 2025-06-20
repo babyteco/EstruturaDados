@@ -40,6 +40,7 @@ void leLivrosTxt(Booked *b){
     while (fscanf(arq, "%d;%49[^;];%49[^;];%49[^;];%d%*c", &id, titulo, autor, genero, &ano) == 5){
         Livro *l = criaLivro(titulo, autor, genero, ano, id);
         b->catalogoLivros = adicionaLivro(b->catalogoLivros, l);
+        //imprimeLivro(l);
     }
     fclose(arq);
 }
@@ -55,17 +56,27 @@ void leLeitoresTxt(Booked *b){
     int numAfinidades;
     int id;
     while (fscanf(arq, "%d;%49[^;];%d%*c", &id, nome, &numAfinidades) == 3){
+        //criar array de generos
         char **generos = (char**) malloc(numAfinidades * sizeof(char*));
         for (int i = 0; i < numAfinidades; i++){
             generos[i] = (char*) malloc(MAX_TAM_STRING * sizeof(char));
         }
 
-        for (int i = 0; i < numAfinidades; i++){
-            fscanf(arq, "%49[^;]", generos[i]);
+        for (int i = 0; i < numAfinidades; i++) {
+            if (i < numAfinidades - 1) {
+                // para todos exceto o último: consome ‘;’ e lê até antes do próximo ‘;’
+                fscanf(arq, " %49[^;];", generos[i]);
+            } else {
+                // último gênero: lê até antes do '\n'
+                fscanf(arq, " %49[^\n]\n", generos[i]);
+            }
         }
         Leitor *l = criaLeitor(nome, generos, id, numAfinidades); 
-        b->listaLeitores = adicionaLeitor(b->listaLeitores, l);
+        if (l != NULL){
+            b->listaLeitores = adicionaLeitor(b->listaLeitores, l);
+        } else printf("nao foi possivel criar leitor");
         
+        //liberar array de generos
         for (int i = 0; i < numAfinidades; i++){
             free(generos[i]);
         }
@@ -98,8 +109,9 @@ void comandosTxt(Booked *b){
             adicionaLivroDesejado(leitor, livro);
             break;
         case 3:
-            printf("%s ", getNomeLeitor(buscaLeitor(b->listaLeitores, param1)));
-            adicionaRecomendacaoDada(leitor, livro);
+            printf("%s ", getNomeLeitor(leitor));
+            Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
+            adicionaRecomendacaoDada(destinatario, livro);
             break;
         case 4:
             aceitaRecomendacao(b->listaLeitores, param1, param2, param3);

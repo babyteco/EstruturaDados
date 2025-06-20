@@ -20,5 +20,6 @@ Livro *retiraRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
 Leitor *buscaRecomendacao(ListaRecomendacoes *lr, int idLivro, int idRemetente);
 
+void liberaListaRecomendacoes(ListaRecomendacoes *lr);
 
 #endif

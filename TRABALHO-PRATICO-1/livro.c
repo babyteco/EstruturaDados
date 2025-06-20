@@ -39,3 +39,11 @@ int getIdLivro(Livro *l){
 char *getTituloLivro(Livro *l){
     return l->titulo;
 }
+
+void imprimeLivro(Livro *l){
+    printf("Livro: %s\n", l->titulo);
+    printf("ID: %d\n", l->id);
+    printf("Genero: %s\n", l->genero);
+    printf("Autor: %s\n", l->autor);
+    printf("Ano: %d\n\n\n", l->ano);
+}

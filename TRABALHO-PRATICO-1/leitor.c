@@ -67,32 +67,47 @@ char *getNomeLeitor(Leitor *l){
 void adicionaLivroLido(Leitor *leitor, Livro *livro){
     if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
         leitor->lidos = adicionaLivro(leitor->lidos, livro);
-        printf("%s leu ""%s""\n", leitor->nome, getTituloLivro(livro));
+        printf("%s leu \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
 }
 
 void adicionaLivroDesejado(Leitor *leitor, Livro *livro){
     if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
         leitor->desejados = adicionaLivro(leitor->desejados, livro);
-        printf("%s deseja ler ""%s""\n", leitor->nome, getTituloLivro(livro));
+        printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
 }
 
+void adicionaLivroDesejadoPorRecomendacao(Leitor *leitor, Livro *livro, int idRemetente){
+    printf("toma jack carlaoo\n");
+    printf("aq tbm\n");
+    if (buscaRecomendacao(leitor->recomendacoes, getIdLivro(livro), idRemetente) == NULL){
+        leitor->desejados = adicionaLivro(leitor->desejados, livro);
+        printf("%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
+    }
+    printf("saiu fora jacola\n");
+}
+
+
 void adicionaRecomendacaoDada(Leitor *leitor, Livro *livro){
+    // Livro *livroExistenteNaLista = buscaLivro(leitor->lidos, getIdLivro(livro));
+    // imprimeLivro(livro);
     if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
         leitor->recomendacoes = adicionaRecomendacaoLista(leitor->recomendacoes, leitor, livro);
-        printf("recomenda ""%s"" para %s\n", getTituloLivro(livro), leitor->nome);
+        printf("recomenda \"%s\" para %s\n", getTituloLivro(livro), leitor->nome);
     }
+    // printf("entrou ");
 }
 
 void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int idRemetente){
     Leitor *leitor = buscaLeitor(ll, idDestinatario);
     Leitor *remetente = buscaLeitor(ll, idRemetente);
     Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);
+    
     //adiciona livro em desejados apenas se ele ja nao estava la
     if (buscaLivro(leitor->desejados, idLivro) == NULL){
-        adicionaLivroDesejado(leitor, livro);
-        printf("%s aceita recomendação ""%s"" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
+        adicionaLivroDesejadoPorRecomendacao(leitor, livro, getIdLeitor(remetente));
+        printf("%s aceita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
     }
 }
 
@@ -100,7 +115,7 @@ void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int
     Leitor *remetente = buscaLeitor(ll, idRemetente);
     Leitor *leitor = buscaLeitor(ll, idDestinatario);
     Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);    
-    printf("%s rejeita recomendação ""%s"" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
+    printf("%s rejeita recomendação \"%s\" de %s\n", leitor->nome, getTituloLivro(livro), remetente->nome);
 
 }
 
@@ -140,4 +155,14 @@ void imprimeListaLidos(Leitor *l){
 
 void imprimeListaDesejados(Leitor *l){
     imprimeLivrosLidos(l->desejados);
+}
+
+void imprimeLeitor(Leitor *l){
+    printf("Nome: %s\n", l->nome);
+    printf("Id: %d\n", l->id);
+    printf("NumAfiniades: %d\n", l->numAfinidades);
+    for (int i = 0; i < l->numAfinidades; i++){
+        printf("Afinidade[%d]: %s\n", i, l->generos[i]);
+    }
+    printf("\n");
 }
