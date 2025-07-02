@@ -45,7 +45,9 @@ int arv_vazia (Arv* a){
 }
 
 //indica a ocorrência (1) ou não (0) do aluno (pela chave de busca mat)
-int arv_pertence (Arv* a, int mat);
+int arv_pertence (Arv* a, int mat){
+    
+}
 
 //imprime as informações dos nós da árvore
 void arv_imprime (Arv* a);
