@@ -180,6 +180,10 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
     ListaLeitores *afinidadesPrimarias = getListaAfinidade(l1);
     
     Celula *temp = afinidadesPrimarias->primeiro;
+    printf("lista de afinidade diretas de %s\n", getNomeLeitor(temp->leitor));
+    /*while(temp != NULL){
+        teste(afinidadesPrimarias);
+    }*/
     while (temp != NULL){
         if (temp->leitor == l2){
             return 1;
@@ -219,6 +223,19 @@ void imprimeLeitores(ListaLeitores *ll, FILE *saida){
         temp = temp->prox;
     }
 
+}
+
+void teste(ListaLeitores *ll){
+    if (ll == NULL || ll->primeiro == NULL){
+        printf("Lista de leitores vazia\n");
+        return;
+    }
+    
+    Celula *temp = ll->primeiro;
+    while (temp != NULL){
+        printf("\nLeitor: %s\n", getNomeLeitor(temp->leitor));
+        temp = temp->prox;
+    }
 }
 
 void imprimeAfinidades(ListaLeitores *afinidades, FILE *saida){

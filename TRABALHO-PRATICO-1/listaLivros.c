@@ -155,9 +155,9 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2, FILE *saida){
         while (segundaLista != NULL){
             if (getIdLivro(primeiraLista->livro) == getIdLivro(segundaLista->livro)){
                 if (flag == 0){
-                    fprintf(saida, "\"%s\"", getTituloLivro(primeiraLista->livro));
+                    fprintf(saida, "%s", getTituloLivro(primeiraLista->livro));
                 } else{ 
-                    fprintf(saida, ", \"%s\" ", getTituloLivro(primeiraLista->livro));
+                    fprintf(saida, ", %s", getTituloLivro(primeiraLista->livro));
                 }
                 
                 flag = 1;

@@ -37,6 +37,9 @@ void leLivrosTxt(Booked *b){
     char genero[MAX_TAM_STRING];
     int ano;
     int id;
+    
+    char linha[50];
+    fgets(linha, sizeof(linha), arq);
     while (fscanf(arq, "%d;%49[^;];%49[^;];%49[^;];%d%*c", &id, titulo, autor, genero, &ano) == 5){
         Livro *l = criaLivro(titulo, autor, genero, ano, id);
         b->catalogoLivros = adicionaLivro(b->catalogoLivros, l);
@@ -52,6 +55,9 @@ void leLeitoresTxt(Booked *b){
         return;
     }
     
+    char linha[50];
+    fgets(linha, sizeof(linha), arq);
+
     char nome[MAX_TAM_STRING];
     int numAfinidades;
     int id;
@@ -94,6 +100,10 @@ void comandosTxt(Booked *b){
     }
     
     FILE *saida = fopen("Saida.txt", "w");
+    
+    char linha[50];
+    fgets(linha, sizeof(linha), arq);
+
     int funcionalidade, param1, param2, param3;
     while (fscanf(arq, "%d;%d;%d;%d%*c", &funcionalidade, &param1, &param2, &param3) == 4){
         Livro *livro = buscaLivro(b->catalogoLivros, param2);
