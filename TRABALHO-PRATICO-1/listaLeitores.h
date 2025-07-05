@@ -33,6 +33,4 @@ void imprimeLeitores(ListaLeitores *ll, FILE *saida);
 
 void imprimeAfinidades(ListaLeitores *afinidades, FILE *saida);
 
-void teste(ListaLeitores *ll);
-
 #endif

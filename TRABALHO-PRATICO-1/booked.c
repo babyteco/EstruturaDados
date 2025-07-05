@@ -88,6 +88,9 @@ void leLeitoresTxt(Booked *b){
         }
         free(generos);
     }
+    // FILE *saida = fopen("Saida.txt", "w");
+    // imprimeLeitores(b->listaLeitores, saida);
+    // fclose(saida);
     fclose(arq);
     preencheListaAfinidadesDiretas(b->listaLeitores);
 }
@@ -118,7 +121,6 @@ void comandosTxt(Booked *b){
             adicionaLivroDesejado(leitor, livro, saida);
             break;
         case 3:
-            fprintf(saida, "%s ", getNomeLeitor(leitor));
             Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
             if (destinatario == NULL){
                 printf("Erro: Destinatário não encontrado\n");

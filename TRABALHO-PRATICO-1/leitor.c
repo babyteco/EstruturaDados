@@ -69,13 +69,17 @@ void adicionaLivroLido(Leitor *leitor, Livro *livro, FILE *saida){
     if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
         leitor->lidos = adicionaLivro(leitor->lidos, livro);
         fprintf(saida, "%s leu \"%s\"\n", leitor->nome, getTituloLivro(livro));
+    } else{
+        fprintf(saida, "%s já leu \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
 }
 
 void adicionaLivroDesejado(Leitor *leitor, Livro *livro, FILE *saida){
-    if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL){
+    if (buscaLivro(leitor->lidos, getIdLivro(livro)) == NULL && buscaLivro(leitor->desejados, getIdLivro(livro)) == NULL){
         leitor->desejados = adicionaLivro(leitor->desejados, livro);
         fprintf(saida, "%s deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
+    } else if(buscaLivro(leitor->desejados, getIdLivro(livro)) != NULL){
+        fprintf(saida, "%s já deseja ler \"%s\"\n", leitor->nome, getTituloLivro(livro));
     }
 }
 
@@ -101,7 +105,18 @@ void adicionaRecomendacaoDada(Leitor *destinatario, Livro *livro, Leitor *remete
     
     // Livro *livroExistenteNaLista = buscaLivro(leitor->lidos, getIdLivro(livro));
     // imprimeLivro(livro);
+    if (buscaLivro(destinatario->lidos, getIdLivro(livro)) != NULL){
+        //Lucius não precisa da recomendação de "Iracema" pois já leu este livro
+        fprintf(saida, "%s não precisa da recomendação de \"%s\" pois já leu este livro\n", destinatario->nome, getTituloLivro(livro));
+        return;
+    }
+    
     if (buscaRecomendacao(destinatario->recomendacoes, getIdLivro(livro), getIdLeitor(remetente)) == NULL){
+        fprintf(saida, "%s ", getNomeLeitor(remetente));
+        if(destinatario == remetente){
+            fprintf(saida, "não pode recomendar livros para si mesmo\n");
+            return;
+        }
         destinatario->recomendacoes = adicionaRecomendacaoLista(destinatario->recomendacoes, remetente, livro);
         fprintf(saida, "recomenda \"%s\" para %s\n", getTituloLivro(livro), destinatario->nome);
     }
@@ -117,6 +132,11 @@ void aceitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int 
         return;
     }
     
+    if(buscaRecomendacao(leitor->recomendacoes, idLivro, remetente->id) == NULL){
+        fprintf(saida, "%s não possui recomendação do livro de ID %d feita por %s\n", leitor->nome, idLivro, remetente->nome);
+        return;
+    }
+
     Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);
     
     // Verificar se a recomendação foi encontrada
@@ -142,6 +162,11 @@ void rejeitaRecomendacao(ListaLeitores *ll, int idDestinatario, int idLivro, int
         return;
     }
     
+    if(buscaRecomendacao(leitor->recomendacoes, idLivro, remetente->id) == NULL){
+        fprintf(saida, "%s não possui recomendação do livro de ID %d feita por %s\n", leitor->nome, idLivro, remetente->nome);
+        return;
+    }
+
     Livro *livro = retiraRecomendacao(leitor->recomendacoes, idLivro, idRemetente);
     
     // Verificar se a recomendação foi encontrada
