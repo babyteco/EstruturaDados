@@ -1,16 +1,13 @@
 id;titulo;autor;genero;ano
-1;Duna;Frank Herbert;Ficção Científica;1965
-2;Fundação;Isaac Asimov;Ficção Científica;1951
-3;Neuromancer;William Gibson;Tecnologia;1984
-4;Steve Jobs;Walter Isaacson;Biografia;2011
-5;Sapiens;Yuval Noah Harari;Ciência;2011
-6;Orgulho e Preconceito;Jane Austen;Romance;1813
-7;Como Eu Era Antes de Você;Jojo Moyes;Romance;2012
-8;Hamlet;William Shakespeare;Drama;1603
-9;A Morte do Caixeiro Viajante;Arthur Miller;Drama;1949
-10;Dom Casmurro;Machado de Assis;Literatura;1899
-11;O Iluminado;Stephen King;Terror;1977
-12;Drácula;Bram Stoker;Terror;1897
-13;Psicose;Robert Bloch;Suspense;1959
-14;A Garota no Trem;Paula Hawkins;Suspense;2015
-15;Einstein;Walter Isaacson;Biografia;2007
+1;O Cortiço;Aluísio Azevedo;Terror;1890
+2;O Xangô de Baker Street;Jô Soares;Mistério;1995
+3;Senhora;José de Alencar;Romance;1875
+4;A Hora da Estrela;Clarice Lispector;Terror;1977
+5;O Caso da Estranha Fotografia;Marcos Rey;Mistério;1978
+6;Iracema;José de Alencar;Romance;1865
+7;Agosto;Rubem Fonseca;Mistério;1990
+8;A Moreninha;Joaquim Manuel de Macedo;Romance;1844
+9;Incidente em Antares;Erico Verissimo;Terror;1971
+10;A Grande Arte;Rubem Fonseca;Mistério;1983
+11;Os Sertões;Euclides da Cunha;História;1902
+12;Nós;Lauro Packer;Distopia;2016

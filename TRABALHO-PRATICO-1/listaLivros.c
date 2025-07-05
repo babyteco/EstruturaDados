@@ -175,14 +175,18 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2, FILE *saida){
 }
 
 void imprimeLivrosLidos(Leitor *leitor, FILE *saida){
-    ListaLivros *lidos = getListaLidosDeUmLeitor(leitor);
-    Celula *temp = lidos->primeiro;
-    
-    if (lidos == NULL){
-        printf("Lista de livros vazia\n");
+    if (leitor == NULL){
+        fprintf(saida, "\n");
         return;
     }
-
+    
+    ListaLivros *lidos = getListaLidosDeUmLeitor(leitor);
+    if (lidos == NULL || lidos->primeiro == NULL){
+        fprintf(saida, "\n");
+        return;
+    }
+    
+    Celula *temp = lidos->primeiro;
     while (temp != NULL){
         if(temp->prox == NULL){
             fprintf(saida, "%s\n", getTituloLivro(temp->livro));
@@ -194,14 +198,18 @@ void imprimeLivrosLidos(Leitor *leitor, FILE *saida){
 }
 
 void imprimeLivrosDesejados(Leitor *leitor, FILE *saida){
-    ListaLivros *desejados = getListaDesejadosDeUmLeitor(leitor);
-    Celula *temp = desejados->primeiro;
-    
-    if (desejados == NULL){
-        printf("Lista de livros vazia\n");
+    if (leitor == NULL){
+        printf("Não é possivel imprimir livros desejado pois o leitor nao foi encontrado\n");
         return;
     }
-
+    
+    ListaLivros *desejados = getListaDesejadosDeUmLeitor(leitor);
+    if (desejados == NULL || desejados->primeiro == NULL){
+        printf("Não é possivel imprimir livros desejado pois a lista de desejados nao foi encontrada\n");
+        return;
+    }
+    
+    Celula *temp = desejados->primeiro;
     while (temp != NULL){
         if(temp->prox == NULL){
             fprintf(saida, "%s\n", getTituloLivro(temp->livro));

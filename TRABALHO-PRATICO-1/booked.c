@@ -115,18 +115,30 @@ void comandosTxt(Booked *b){
         switch (funcionalidade)
         {
         case 1:
-            adicionaLivroLido(leitor, livro, saida);
+            if (leitor != NULL && livro != NULL){
+                adicionaLivroLido(leitor, livro, saida);
+            } else {
+                fprintf(saida, "Erro: Leitor ou livro não encontrado\n");
+            }
             break;
         case 2:
-            adicionaLivroDesejado(leitor, livro, saida);
+            if (leitor != NULL && livro != NULL){
+                adicionaLivroDesejado(leitor, livro, saida);
+            } else {
+                fprintf(saida, "Erro: Leitor ou livro não encontrado\n");
+            }
             break;
         case 3:
-            Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
-            if (destinatario == NULL){
-                printf("Erro: Destinatário não encontrado\n");
-                break;
+            if (leitor != NULL && livro != NULL){
+                Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
+                if (destinatario == NULL){
+                    fprintf(saida, "Erro: Destinatário não encontrado\n");
+                    break;
+                }
+                adicionaRecomendacaoDada(destinatario, livro, leitor, saida);
+            } else {
+                fprintf(saida, "Erro: Leitor ou livro não encontrado\n");
             }
-            adicionaRecomendacaoDada(destinatario, livro, leitor, saida);
             break;
         case 4:
             aceitaRecomendacao(b->listaLeitores, param1, param2, param3, saida);
@@ -139,15 +151,19 @@ void comandosTxt(Booked *b){
             livrosEmComum(b->listaLeitores, param1, param3, saida);
             break;
         case 7:
-            // for (int i = 1; i < 4; i++){
-            //     fprintf(saida, "\n\n\nConstando afinidades diretas de %s\n", getNomeLeitor(buscaLeitor(b->listaLeitores, i)));
-            //     imprimeLeitores(getListaAfinidade(buscaLeitor(b->listaLeitores, i)), saida);
-            //     fprintf(saida, "acabou a lista de %s\n\n\n", getNomeLeitor(buscaLeitor(b->listaLeitores, i)));
-            // }
-            if(verificaSeTemAfinidade(b->listaLeitores, param1, param3) == 1){
-                fprintf(saida, "Existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(buscaLeitor(b->listaLeitores, param3)));
-            } else{
-                fprintf(saida, "Nao existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(buscaLeitor(b->listaLeitores, param3)));
+            if (leitor != NULL){
+                Leitor *leitor2 = buscaLeitor(b->listaLeitores, param3);
+                if (leitor2 != NULL){
+                    if(verificaSeTemAfinidade(b->listaLeitores, param1, param3) == 1){
+                        fprintf(saida, "Existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(leitor2));
+                    } else{
+                        fprintf(saida, "Nao existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(leitor2));
+                    }
+                } else {
+                    fprintf(saida, "Erro: Segundo leitor não encontrado\n");
+                }
+            } else {
+                fprintf(saida, "Erro: Primeiro leitor não encontrado\n");
             }
             break;
         case 8:

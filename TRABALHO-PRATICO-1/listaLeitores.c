@@ -147,10 +147,13 @@ void preencheListaAfinidadesDiretas(ListaLeitores *l){
 }
 
 int verificaSeTemComum(Leitor *l1, Leitor *l2){   
-    if (l1 == l2){
+    if (l1 == NULL || l2 == NULL){
         return 0;
     }
     
+    if (l1 == l2){
+        return 0;
+    }
     
     char **listaGeneros1 = getListaGeneros(l1);
     char **listaGeneros2 = getListaGeneros(l2);
@@ -177,21 +180,40 @@ int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
         return 0;
     }
     
+    // Primeiro verificar afinidade direta
+    if (verificaSeTemComum(l1, l2)){
+        return 1;
+    }
+    
+    // Se não há afinidade direta, verificar afinidades indiretas
     ListaLeitores *afinidadesPrimarias = getListaAfinidade(l1);
     
+    // Verificar se a lista de afinidades existe
+    if (afinidadesPrimarias == NULL){
+        return 0;
+    }
+    
     Celula *temp = afinidadesPrimarias->primeiro;
+    
+    // Verificar se a lista de afinidades não está vazia
+    if (temp == NULL){
+        return 0;
+    }
+    
     while (temp != NULL){
         if (temp->leitor == l2){
             return 1;
         }
         
         ListaLeitores *afinidadesSecundarias = getListaAfinidade(temp->leitor);
-        Celula *temp2 = afinidadesSecundarias->primeiro;
-        while (temp2 != NULL){
-            if (temp2->leitor == l2){
-                return 1;
+        if (afinidadesSecundarias != NULL){
+            Celula *temp2 = afinidadesSecundarias->primeiro;
+            while (temp2 != NULL){
+                if (temp2->leitor == l2){
+                    return 1;
+                }
+                temp2 = temp2->prox;
             }
-            temp2 = temp2->prox;
         }
         temp = temp->prox;
     }
@@ -222,6 +244,11 @@ void imprimeLeitores(ListaLeitores *ll, FILE *saida){
 }
 
 void imprimeAfinidades(ListaLeitores *afinidades, FILE *saida){
+    if (afinidades == NULL || afinidades->primeiro == NULL){
+        fprintf(saida, "\n");
+        return;
+    }
+    
     Celula *temp = afinidades->primeiro;
     
     while (temp != NULL){
