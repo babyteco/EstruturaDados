@@ -170,55 +170,71 @@ int verificaSeTemComum(Leitor *l1, Leitor *l2){
     return 0;
 }
 
-int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2){
-    Leitor *l1 = buscaLeitor(ll, id1);
-    Leitor *l2 = buscaLeitor(ll, id2);
-    
-    // Verificar se os leitores existem
-    if (l1 == NULL || l2 == NULL){
-        printf("Erro: Leitor não encontrado\n");
-        return 0;
+int contaLeitores(ListaLeitores *ll) {
+    int n = 0;
+    Celula *p = ll->primeiro;
+    while (p) {
+        n++;
+        p = p->prox;
     }
-    
-    // Primeiro verificar afinidade direta
-    if (verificaSeTemComum(l1, l2)){
-        return 1;
-    }
-    
-    // Se não há afinidade direta, verificar afinidades indiretas
-    ListaLeitores *afinidadesPrimarias = getListaAfinidade(l1);
-    
-    // Verificar se a lista de afinidades existe
-    if (afinidadesPrimarias == NULL){
-        return 0;
-    }
-    
-    Celula *temp = afinidadesPrimarias->primeiro;
-    
-    // Verificar se a lista de afinidades não está vazia
-    if (temp == NULL){
-        return 0;
-    }
-    
-    while (temp != NULL){
-        if (temp->leitor == l2){
+    return n;
+}
+
+int jaFoiVisitado(Leitor **visitados, int numVisitados, Leitor *leitor){
+    for (int i = 0; i < numVisitados; i++) {
+        if (visitados[i] == leitor)
             return 1;
-        }
-        
-        ListaLeitores *afinidadesSecundarias = getListaAfinidade(temp->leitor);
-        if (afinidadesSecundarias != NULL){
-            Celula *temp2 = afinidadesSecundarias->primeiro;
-            while (temp2 != NULL){
-                if (temp2->leitor == l2){
-                    return 1;
-                }
-                temp2 = temp2->prox;
-            }
-        }
-        temp = temp->prox;
     }
     return 0;
-}   
+}
+
+int dfsAfinidadeBusca(Leitor *atual, Leitor *destino, Leitor **visitados, int *numVisitados) {
+    if (atual == destino){
+        return 1;               /* caminho encontrado      */
+    }
+    if (jaFoiVisitado(visitados, *numVisitados, atual)){
+        return 0;
+    }
+
+    visitados[*numVisitados] = atual;             /* marca como visitado     */
+    (*numVisitados)++;
+
+    ListaLeitores *adj = getListaAfinidade(atual);/* só afinidades diretas   */
+    if (adj) {
+        Celula *c = adj->primeiro;
+        while (c) {
+            if (dfsAfinidadeBusca(c->leitor, destino, visitados, numVisitados)){
+                return 1;                         /* encontrou caminho       */
+            }
+            c = c->prox;
+        }
+    }
+    return 0;                                     /* não há caminho          */
+}
+
+int verificaSeTemAfinidade(ListaLeitores *ll, int id1, int id2) {
+    if (!ll) return 0;
+
+    Leitor *l1 = buscaLeitor(ll, id1);
+    Leitor *l2 = buscaLeitor(ll, id2);
+
+    /* validação básica --------------------------------------------------- */
+    if (!l1 || !l2 || l1 == l2) return 0;
+
+    /* afinidade direta – atalho rápido ---------------------------------- */
+    if (verificaSeTemComum(l1, l2))
+        return 1;
+
+    /* afinidade indireta – DFS ------------------------------------------ */
+    int total = contaLeitores(ll);                 /* tamanho da lista global */
+    Leitor **visitados = (Leitor**) malloc(total * sizeof(Leitor*));
+    int nVisit = 0;
+
+    int resultado = dfsAfinidadeBusca(l1, l2, visitados, &nVisit);
+
+    free(visitados);
+    return resultado;                             /* 1 se há caminho, 0 senão */
+}
 
 void imprimeLeitores(ListaLeitores *ll, FILE *saida){
     if (ll == NULL || ll->primeiro == NULL){

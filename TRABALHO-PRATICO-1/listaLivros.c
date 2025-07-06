@@ -139,8 +139,11 @@ int livrosEmComum(ListaLeitores *ll, int id1, int id2, FILE *saida){
     Leitor *leitor2 = buscaLeitor(ll, id2);
     
     // Verificar se os leitores existem
-    if (leitor1 == NULL || leitor2 == NULL){
-        printf("Erro: Leitor não encontrado\n");
+    if (leitor1 == NULL){
+        fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", id1);
+        return 0;
+    } else if(leitor2 == NULL){
+        fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", id2);
         return 0;
     }
     
@@ -197,25 +200,24 @@ void imprimeLivrosLidos(Leitor *leitor, FILE *saida){
     }
 }
 
-void imprimeLivrosDesejados(Leitor *leitor, FILE *saida){
-    if (leitor == NULL){
-        printf("Não é possivel imprimir livros desejado pois o leitor nao foi encontrado\n");
-        return;
-    }
-    
+void imprimeLivrosDesejados(Leitor *leitor, FILE *saida){ 
     ListaLivros *desejados = getListaDesejadosDeUmLeitor(leitor);
-    if (desejados == NULL || desejados->primeiro == NULL){
-        printf("Não é possivel imprimir livros desejado pois a lista de desejados nao foi encontrada\n");
-        return;
-    }
-    
+
+    int flag = 0;
     Celula *temp = desejados->primeiro;
     while (temp != NULL){
         if(temp->prox == NULL){
+            flag = 1;
             fprintf(saida, "%s\n", getTituloLivro(temp->livro));
         } else{
+            flag = 1;
             fprintf(saida, "%s, ", getTituloLivro(temp->livro));
         }
         temp = temp->prox;
     }
+    
+    if (flag == 0 || desejados == NULL){
+        fprintf(saida, "\n");
+    }
+    
 }

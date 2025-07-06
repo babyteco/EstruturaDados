@@ -115,29 +115,40 @@ void comandosTxt(Booked *b){
         switch (funcionalidade)
         {
         case 1:
-            if (leitor != NULL && livro != NULL){
+            if (leitor == NULL){
+                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", param1);
+            } else if(livro == NULL){
+                fprintf(saida, "Erro: Livro com ID %d não encontrado\n", param2);
+            }else{
                 adicionaLivroLido(leitor, livro, saida);
-            } else {
-                fprintf(saida, "Erro: Leitor ou livro não encontrado\n");
             }
             break;
         case 2:
-            if (leitor != NULL && livro != NULL){
+            if (leitor == NULL){
+                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", param1);
+            } else if(livro == NULL){
+                fprintf(saida, "Erro: Livro com ID %d não encontrado\n", param2);
+            }else{
                 adicionaLivroDesejado(leitor, livro, saida);
-            } else {
-                fprintf(saida, "Erro: Leitor ou livro não encontrado\n");
             }
             break;
         case 3:
-            if (leitor != NULL && livro != NULL){
-                Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
-                if (destinatario == NULL){
-                    fprintf(saida, "Erro: Destinatário não encontrado\n");
-                    break;
-                }
+            int flag = 0;
+            if (leitor == NULL){
+                flag = 1;
+                fprintf(saida, "Erro: Leitor recomendador com ID %d não encontrado\n", param1);
+            }
+            if (livro == NULL){
+                flag = 1;
+                fprintf(saida, "Erro: Livro com ID %d não encontrado\n", param2);
+            }
+            Leitor *destinatario = buscaLeitor(b->listaLeitores, param3);
+            if (destinatario == NULL){
+                flag = 1;
+                fprintf(saida, "Erro: Leitor destinatário com ID %d não encontrado\n", param3);
+            }
+            if (flag == 0){
                 adicionaRecomendacaoDada(destinatario, livro, leitor, saida);
-            } else {
-                fprintf(saida, "Erro: Leitor ou livro não encontrado\n");
             }
             break;
         case 4:
@@ -157,13 +168,13 @@ void comandosTxt(Booked *b){
                     if(verificaSeTemAfinidade(b->listaLeitores, param1, param3) == 1){
                         fprintf(saida, "Existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(leitor2));
                     } else{
-                        fprintf(saida, "Nao existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(leitor2));
+                        fprintf(saida, "Não existe afinidade entre %s e %s\n", getNomeLeitor(leitor), getNomeLeitor(leitor2));
                     }
                 } else {
-                    fprintf(saida, "Erro: Segundo leitor não encontrado\n");
+                    fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", param3);
                 }
             } else {
-                fprintf(saida, "Erro: Primeiro leitor não encontrado\n");
+                fprintf(saida, "Erro: Leitor com ID %d não encontrado\n", param1);
             }
             break;
         case 8:
@@ -172,6 +183,7 @@ void comandosTxt(Booked *b){
             break;
 
         default:
+            fprintf(saida, "Erro: Comando %d não reconhecido\n", funcionalidade);
             break;
         }
     }
