@@ -13,15 +13,15 @@ int main(){
     Aluno *a7 = cria_aluno("giovani", 6, 6.5);
 
 
-    Arv *folha1 = arv_cria(a4, NULL, NULL);
-    Arv *folha2 = arv_cria(a5, NULL, NULL);
-    Arv *folha3 = arv_cria(a6, NULL, NULL);
-    Arv *folha4 = arv_cria(a7, NULL, NULL);
+    Arvore *folha1 = arv_cria(a4, NULL, NULL);
+    Arvore *folha2 = arv_cria(a5, NULL, NULL);
+    Arvore *folha3 = arv_cria(a6, NULL, NULL);
+    Arvore *folha4 = arv_cria(a7, NULL, NULL);
 
-    Arv *no1 = arv_cria(a2, folha1, folha2);
-    Arv *no2 = arv_cria(a3, folha3, folha4);
+    Arvore *no1 = arv_cria(a2, folha1, folha2);
+    Arvore *no2 = arv_cria(a3, folha3, folha4);
     
-    Arv *raiz = arv_cria(a1, no1, no2);
+    Arvore *raiz = arv_cria(a1, no1, no2);
 
     int mat = 5;
     if (arv_pertence(raiz, mat)){
@@ -30,15 +30,18 @@ int main(){
         printf("o aluno de matricula %d nao pertence à arvore!\n", mat);
     }
     
-    int mat = 6;
-    Arv *pai = arv_pai(raiz, mat);
-    printf("a arvore pai do aluno de matricula %d eh:\n", mat);
-    arv_imprime(pai);
+    mat = 6;
+    Arvore *pai = arv_pai(raiz, mat);
+    printf("O nome do pai do aluno de matricula %d eh: %s\n", mat, get_nome(getAluno(pai)));
 
     printf("A qtd de folhas da arvore eh: %d\n", folhas(raiz));
 
-    int mat = 4;
+    mat = 4;
     printf("O aluno de matricula %d aparece %d vezes na arvore\n", mat, ocorrencias(raiz, mat));
 
+
+    printf("A altura da arvore eh %d\n", altura(raiz));
+
+    arv_libera(raiz);
     return 0;
 }

@@ -6,28 +6,36 @@ typedef struct arv Arvore;
 
 typedef struct aluno Aluno;
 
-typedef struct arv {
+struct arv {
     Aluno *aluno;
     Arvore* esq;
     Arvore* dir;
-} Arv;
+};
 
 //Cria uma árvore vazia
-Arv* arv_criavazia (void){
+Arvore* arv_criavazia (void){
     return NULL;
 }
 
 //cria uma árvore com a informação do nó raiz c, e com subárvore esquerda e e subárvore direita d
-Arv* arv_cria (Aluno* c, Arv* e, Arv* d){
-    Arv *arv = (Arv*) malloc(sizeof(Arv));
+Arvore* arv_cria (Aluno* c, Arvore* e, Arvore* d){
+    Arvore *arv = (Arvore*) malloc(sizeof(Arvore));
     arv->aluno = c;
     arv->dir = d;
     arv->esq = e;
     return arv;
 }
 
+//retorna true se a árvore estiver vazia e false caso contrário
+int arv_vazia (Arvore* a){
+    if (a == NULL){
+        return 1;
+    }
+    return 0;
+}
+
 //libera o espaço de memória ocupado pela árvore a
-Arv* arv_libera (Arv* a){
+Arvore* arv_libera (Arvore* a){
     if (!arv_vazia(a)){
         arv_libera(a->esq);
         arv_libera(a->dir);
@@ -37,16 +45,9 @@ Arv* arv_libera (Arv* a){
     return NULL;
 }
 
-//retorna true se a árvore estiver vazia e false caso contrário
-int arv_vazia (Arv* a){
-    if (a == NULL){
-        return 1;
-    }
-    return 0;
-}
 
 //indica a ocorrência (1) ou não (0) do aluno (pela chave de busca mat)
-int arv_pertence (Arv* a, int mat){
+int arv_pertence (Arvore* a, int mat){
     if (arv_vazia(a)){
         return 0;
     }
@@ -61,7 +62,7 @@ int arv_pertence (Arv* a, int mat){
 }
 
 //imprime as informações dos nós da árvore
-void arv_imprime (Arv* a){
+void arv_imprime (Arvore* a){
     if (!arv_vazia(a)){
         imprime_aluno(a->aluno);
         arv_imprime(a->esq);
@@ -70,7 +71,7 @@ void arv_imprime (Arv* a){
 }
 
 //retorna a mãe/pai de um dado no que contém o aluno com a matrícula mat
-Arv* arv_pai (Arv* a, int mat){
+Arvore* arv_pai (Arvore* a, int mat){
     if (arv_vazia(a)){
         return NULL;
     }
@@ -80,17 +81,17 @@ Arv* arv_pai (Arv* a, int mat){
         (a->esq != NULL && get_matricula(a->esq->aluno) == mat)) {
         return a;
     }
-    Arv *paiEsq = arv_pai(a->esq, mat);
+    Arvore *paiEsq = arv_pai(a->esq, mat);
     if (paiEsq != NULL) return paiEsq;
     
-    Arv *paiDir = arv_pai(a->dir, mat);
+    Arvore *paiDir = arv_pai(a->dir, mat);
     if (paiDir != NULL) return paiDir;
 
     return NULL;
 }
 
 //retorna a quantidade de folhas de uma arvore binaria
-int folhas (Arv* a){
+int folhas (Arvore* a){
     if (a == NULL){
         return 0;
     }
@@ -108,7 +109,7 @@ int folhas (Arv* a){
 }
 
 //retorna o numero de ocorrencias de um dado aluno na árvore
-int ocorrencias (Arv* a, int mat){
+int ocorrencias (Arvore* a, int mat){
     if (a == NULL){
         return 0;
     }
@@ -124,6 +125,21 @@ int ocorrencias (Arv* a, int mat){
 }
 
 //retorna a altura da árvore a
-int altura(Arv* a){
-    
+int altura(Arvore* a){
+    if (a == NULL) {
+        return -1;  // árvore vazia tem altura -1
+    }
+
+    int alt_esq = altura(a->esq);
+    int alt_dir = altura(a->dir);
+
+    if (alt_esq > alt_dir)
+        return alt_esq + 1;
+    else{
+        return alt_dir + 1;
+
+    }
+}
+Aluno *getAluno(Arvore *arvore){
+    return arvore->aluno;
 }
