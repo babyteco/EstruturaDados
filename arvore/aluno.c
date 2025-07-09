@@ -6,13 +6,13 @@
 #include "aluno.h"
 
 // Definicao da struct interna
-struct Aluno {
+struct aluno {
     char nome[TAM_NOME];
     int matricula;
     float nota;
 };
 
-Aluno* cria_aluno(const char* nome, int matricula, float nota) {
+Aluno* cria_aluno(char* nome, int matricula, float nota) {
     Aluno* a = (Aluno*) malloc(sizeof(Aluno));
     if (a != NULL) {
         strncpy(a->nome, nome, TAM_NOME - 1);
@@ -23,7 +23,7 @@ Aluno* cria_aluno(const char* nome, int matricula, float nota) {
     return a;
 }
 
-void set_nome(Aluno* a, const char* nome) {
+void set_nome(Aluno* a, char* nome) {
     if (a != NULL) {
         strncpy(a->nome, nome, TAM_NOME - 1);
         a->nome[TAM_NOME - 1] = '\0';
@@ -42,19 +42,19 @@ void set_nota(Aluno* a, float nota) {
     }
 }
 
-const char* get_nome(const Aluno* a) {
+char* get_nome(Aluno* a) {
     return (a != NULL) ? a->nome : NULL;
 }
 
-int get_matricula(const Aluno* a) {
+int get_matricula(Aluno* a) {
     return (a != NULL) ? a->matricula : -1;
 }
 
-float get_nota(const Aluno* a) {
+float get_nota(Aluno* a) {
     return (a != NULL) ? a->nota : -1.0f;
 }
 
-void imprime_aluno(const Aluno* a) {
+void imprime_aluno(Aluno* a) {
     if (a != NULL) {
         printf("Aluno: %s\nMatricula: %d\nNota: %.2f\n", a->nome, a->matricula, a->nota);
     }

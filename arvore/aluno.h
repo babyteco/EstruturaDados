@@ -9,10 +9,10 @@
 typedef struct aluno Aluno;
 
 // Cria e retorna um ponteiro para um novo aluno
-Aluno* cria_aluno(const char* nome, int matricula, float nota);
+Aluno* cria_aluno(char* nome, int matricula, float nota);
 
 // Define o nome do aluno
-void set_nome(Aluno* a, const char* nome);
+void set_nome(Aluno* a, char* nome);
 
 // Define a matricula do aluno
 void set_matricula(Aluno* a, int matricula);
@@ -21,16 +21,16 @@ void set_matricula(Aluno* a, int matricula);
 void set_nota(Aluno* a, float nota);
 
 // Obtem o nome do aluno
-const char* get_nome(const Aluno* a);
+char* get_nome(Aluno* a);
 
 // Obtem a matricula do aluno
-int get_matricula(const Aluno* a);
+int get_matricula(Aluno* a);
 
 // Obtem a nota do aluno
-float get_nota(const Aluno* a);
+float get_nota(Aluno* a);
 
 // Imprime os dados do aluno
-void imprime_aluno(const Aluno* a);
+void imprime_aluno(Aluno* a);
 
 // Libera a memoria do aluno
 void libera_aluno(Aluno* a);
