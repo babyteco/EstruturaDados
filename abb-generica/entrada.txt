@@ -1,0 +1,5 @@
+1234 Patricia 97 
+8478 Joao 4 
+432 Maria 3 
+5400 Jose 2 
+840 Pedro 8
