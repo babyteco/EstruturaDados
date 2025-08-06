@@ -1,3 +1,5 @@
+//  Created by Matheus Gon Zortea on 06/08/2025.
+
 #include<stdio.h>
 #include<stdlib.h>
 #include "lista.h"
@@ -15,105 +17,139 @@ Lista* criaLista(){
     return NULL;
 }
 
-Lista* insereArvore(Lista *l, Arvore *arv){
-    
-    //impede que Arvores ja existentes sejam adicionados
+//insere uma árvore ordenadamente na lista de arvores
+Lista* insereArvoreNaLista(Lista *l, Arvore *arv){
+    Lista *nova = (Lista*) malloc(sizeof(Lista));
+    nova->arv = arv;
+    nova->prox = NULL;
+    nova->ant = NULL;
+
+    // Caso 1: lista vazia
+    if (l == NULL) {
+        return nova;
+    }
+
     Lista *paliativa = l;
-    while (paliativa != NULL){
-        if (getCaractere(paliativa->arv) == getCaractere(arv)){
-            printf("FALHA: Esse Arvore ja está na arvore!\n");
-            return l;
-        } 
+
+    // Caso 2: inserir no início
+    if (getFrequencia(arv) <= getFrequencia(paliativa->arv)) {
+        nova->prox = paliativa;
+        paliativa->ant = nova;
+        return nova;
+    }
+
+    // Caso 3: inserir no meio ou final
+    while (paliativa->prox != NULL && getFrequencia(arv) > getFrequencia(paliativa->prox->arv)) {
         paliativa = paliativa->prox;
     }
-    
-    
-    //a lista esta vazia
-    if (l == NULL){
-        l = (Lista*) malloc(sizeof(Lista));
-        l->arv = arv;
-        l->ant = NULL;
-        l->prox = NULL;
-        return l;
+
+    // Inserção após paliativa
+    nova->prox = paliativa->prox;
+    nova->ant = paliativa;
+
+    if (paliativa->prox != NULL) {
+        paliativa->prox->ant = nova;
     }
 
-    Lista *nova = (Lista*) malloc(sizeof(Lista));  
-    nova->arv = arv;
-    nova->prox = l;
-    nova->ant = NULL;
-    l->ant = nova;
-
-    return nova;
-}
-
-Lista *RetiraArvore(Lista *l, int codigo){
-    Lista *atual = l;
-    
-    //se o profuto for o unico
-    if ((getCodigoArvore(l->prod) == codigo) && (l->ant == NULL && l->prox == NULL)){
-        liberaArvore(l->prod);
-        free(l);
-        return NULL;
-    }
-    
-    
-    //se o Arvore for o primeiro
-    if (getCodigoArvore(l->prod) == codigo){
-        Lista *temp = l->prox;
-        liberaArvore(l->prod);
-        free(l);
-        temp->ant = NULL;
-        return temp;
-    }
-    
-    //caso geral, em que o Arvore nao e o primeiro da lista 
-    while (atual != NULL){
-
-        if (getCodigoArvore(atual->prod) == codigo){
-
-            //se o Arvore for o ultimo
-            if (atual->prox == NULL){
-                Lista *temp = atual->ant;
-                liberaArvore(atual->prod);
-                free(atual);
-                temp->prox = NULL;
-                return l;
-            }
-            Lista *tempAnt = atual->ant;
-            Lista *tempProx = atual->prox;
-
-            liberaArvore(atual->prod);
-            free(atual);
-
-            tempAnt->prox = tempProx;
-            tempProx->ant = tempAnt;
-
-            return l;
-        }
-
-        atual = atual->prox;
-    }
+    paliativa->prox = nova;
 
     return l;
 }
 
+//retira a celula que contem determinada arvore, sem liberar essa arvore
+Lista *RetiraArvoreDaLista(Lista *l, Arvore *arv){
+    Lista *paliativa = l;
+    while (paliativa != NULL){
+        if (paliativa->arv == arv){
+            if (paliativa->ant == NULL && paliativa->prox == NULL){
+                desalocaCelula(paliativa);
+                return NULL;
+            }
+
+            if (paliativa->ant == NULL){
+                Lista *temp = paliativa->prox;
+                temp->ant = NULL;
+                desalocaCelula(paliativa);
+                return temp;
+            }
+            
+            if (paliativa->prox == NULL){
+                Lista *temp = paliativa->ant;
+                temp->prox = NULL;
+                desalocaCelula(paliativa);
+                return l;
+            }
+            
+            Lista *tempAnt = paliativa->ant;
+            Lista *tempProx = paliativa->prox;
+            tempAnt->prox = tempProx;
+            tempProx->ant = tempAnt;
+            desalocaCelula(paliativa);
+            return l;
+        }
+        paliativa = paliativa->prox;
+    }
+    return l;
+}
+
 void imprimeLista(Lista *l){
-    printf("\nLISTA DE ArvoreS:\n\n");
+    printf("\nLISTA DE Arvores:\n\n");
     
     if (l == NULL){
         printf("Lista vazia :(\n");
     } else{
         Lista *atual = l;
         while (atual != NULL){
-            imprimeArvore(atual->prod);
+            imprimeArvore(atual->arv);
             atual = atual->prox;
         }   
     }
 }
 
+int getTamanhoLista(Lista *l){
+    Lista *paliativo = l;
+    
+    if (l == NULL){
+        return 0;
+    }
+    
+    int soma = 0;
+    while (paliativo != NULL){
+        soma++;
+        paliativo = paliativo->prox;
+    }
+    return soma;
+}
+
+Lista *obtemListaIdeal(Lista *l){
+    int tam = getTamanhoLista(l);
+
+    if (tam <= 1){
+        return l;
+    }
+    
+    Arvore *T1, *T2;
+    T1 = l->arv;
+    T2 = l->prox->arv;
+
+    int somaFrequencia = getFrequencia(T1) + getFrequencia(T2);
+
+    Arvore *nova = criaArvore('$', T1, T2, somaFrequencia);
+
+    l = RetiraArvoreDaLista(l, T1);
+    l = RetiraArvoreDaLista(l, T2);
+    l = insereArvoreNaLista(l, nova);
+
+    return obtemListaIdeal(l);
+}
+
+void desalocaCelula(Lista *l){
+    free(l);
+}
+
 void liberaLista(Lista *l){
     while (l != NULL){
-        liberaArvore(l->prod);
+        liberaArvore(l->arv);
         Lista *temp = l;
         l = l->prox;
         free(temp);

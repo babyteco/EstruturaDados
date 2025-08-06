@@ -1,16 +1,19 @@
+//  Created by Matheus Gon Zortea on 06/08/2025.
+
 #ifndef _LISTA_
 #define _LISTA_
-#include "produto.h"
+
+#include "arvore.h"
 
 typedef struct lista Lista;
 
 Lista* criaLista();
 
-Lista* insereProduto(Lista *l, Produto *p);
+Lista* insereArvoreNaLista(Lista *l, Arvore *arv);
 
-Lista* RetiraProduto(Lista *l, int codigo);
+Lista *RetiraArvoreDaLista(Lista *l, Arvore *arv);
 
-void imprimeLista(Lista *l);
+void desalocaCelula(Lista *l);
 
 void liberaLista(Lista *l);
 

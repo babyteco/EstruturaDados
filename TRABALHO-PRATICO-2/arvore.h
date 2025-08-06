@@ -1,16 +1,15 @@
+//  Created by Matheus Gon Zortea on 06/08/2025.
+
 #ifndef arvore_h
 #define arvore_h
 
 typedef struct arv Arvore;
 
-//Cria uma árvore vazia
-Arvore* arv_criavazia (void);
-
 //cria uma árvore com a informação do nó raiz c, e com subárvore esquerda e e subárvore direita d
-Arvore* arv_cria (char c, Arvore* e, Arvore* d);
+Arvore* criaArvore (char c, Arvore* e, Arvore* d, int frequencia);
 
 //libera o espaço de memória ocupado pela árvore a
-Arvore* arv_libera (Arvore* a);
+Arvore* liberaArvore (Arvore* a);
 
 //retorna true se a árvore estiver vazia e false caso contrário
 int arv_vazia (Arvore* a);
@@ -19,7 +18,7 @@ int arv_vazia (Arvore* a);
 int arv_pertence (Arvore* a, char caractere);
 
 //imprime as informações dos nós da árvore
-void arv_imprime (Arvore* a);
+void imprimeArvore (Arvore* a);
 
 //retorna a mãe/pai de um dado no que contém o aluno com a matrícula mat
 Arvore* arv_pai (Arvore* a, char caractere);
@@ -34,5 +33,7 @@ int ocorrencias (Arvore* a, int mat);
 int altura(Arvore* a);
 
 char getCaractere(Arvore *arvore);
+
+int getFrequencia(Arvore *arv);
 
 #endif 

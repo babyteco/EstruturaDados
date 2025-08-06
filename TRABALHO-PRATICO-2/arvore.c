@@ -1,26 +1,22 @@
+//  Created by Matheus Gon Zortea on 06/08/2025.
+
 #include<stdio.h>
 #include<stdlib.h>  
-#include "aluno.h"
 
 typedef struct arv Arvore;
 
 struct arv {
-    int numero;
     char caractere;
     int frequencia;
     Arvore* esq;
     Arvore* dir;
 };
 
-//Cria uma árvore vazia
-Arvore* arv_criavazia (void){
-    return NULL;
-}
-
 //cria uma árvore com a informação do nó raiz c, e com subárvore esquerda e e subárvore direita d
-Arvore* arv_cria (char c, Arvore* e, Arvore* d){
+Arvore* criaArvore (char c, Arvore* e, Arvore* d, int frequencia){
     Arvore *arv = (Arvore*) malloc(sizeof(Arvore));
     arv->caractere = c;
+    arv->frequencia = frequencia;
     arv->dir = d;
     arv->esq = e;
     return arv;
@@ -35,16 +31,15 @@ int arv_vazia (Arvore* a){
 }
 
 //libera o espaço de memória ocupado pela árvore a
-Arvore* arv_libera (Arvore* a){
+Arvore* liberaArvore (Arvore* a){
     if (!arv_vazia(a)){
-        arv_libera(a->esq);
-        arv_libera(a->dir);
+        liberaArvore(a->esq);
+        liberaArvore(a->dir);
         free(a);
     }
     
     return NULL;
 }
-
 
 //indica a ocorrência (1) ou não (0) do aluno (pela chave de busca mat)
 int arv_pertence (Arvore* a, char caractere){
@@ -62,15 +57,14 @@ int arv_pertence (Arvore* a, char caractere){
 }
 
 //imprime as informações dos nós da árvore
-void arv_imprime (Arvore* a){
+void imprimeArvore (Arvore* a){
     if (!arv_vazia(a)){
         printf("caractere: %c\n", a->caractere);
-        arv_imprime(a->esq);
-        arv_imprime(a->dir);
+        imprimeArvore(a->esq);
+        imprimeArvore(a->dir);
     }
 }
 
-//retorna a mãe/pai de um dado no que contém o aluno com a matrícula mat
 Arvore* arv_pai (Arvore* a, char caractere){
     if (arv_vazia(a)){
         return NULL;
@@ -124,6 +118,11 @@ int altura(Arvore* a){
 
     }
 }
+
 char getCaractere(Arvore *arvore){
     return arvore->caractere;
+}
+
+int getFrequencia(Arvore *arv){
+    return arv->frequencia;
 }
