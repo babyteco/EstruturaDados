@@ -32,6 +32,8 @@ int ocorrencias (Arvore* a, int mat);
 //retorna a altura da árvore a
 int altura(Arvore* a);
 
+void atualizaFrequencia(Arvore *arv, int freq);
+
 char getCaractere(Arvore *arvore);
 
 int getFrequencia(Arvore *arv);

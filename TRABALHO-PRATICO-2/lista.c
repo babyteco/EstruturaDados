@@ -143,6 +143,18 @@ Lista *obtemListaIdeal(Lista *l){
     return obtemListaIdeal(l);
 }
 
+Arvore *buscaArvore(Lista *l, char caractere){
+    Lista *paliativo = l;
+    while (paliativo != NULL){
+        if (getCaractere(paliativo->arv) == caractere){
+            return paliativo->arv;
+        }
+        paliativo = paliativo->prox;
+    }
+    
+    return NULL;
+}
+
 void desalocaCelula(Lista *l){
     free(l);
 }

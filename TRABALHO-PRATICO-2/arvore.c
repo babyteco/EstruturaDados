@@ -119,6 +119,10 @@ int altura(Arvore* a){
     }
 }
 
+void atualizaFrequencia(Arvore *arv, int freq){
+    arv->frequencia = freq;
+}
+
 char getCaractere(Arvore *arvore){
     return arvore->caractere;
 }
