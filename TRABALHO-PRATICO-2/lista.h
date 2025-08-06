@@ -15,6 +15,10 @@ Lista *RetiraArvoreDaLista(Lista *l, Arvore *arv);
 
 void desalocaCelula(Lista *l);
 
+Lista *obtemListaIdeal(Lista *l);
+
+Arvore *getArvore(Lista *l);
+
 Arvore *buscaArvore(Lista *l, char caractere);
 
 void liberaLista(Lista *l);

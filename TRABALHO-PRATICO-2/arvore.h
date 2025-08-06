@@ -3,6 +3,8 @@
 #ifndef arvore_h
 #define arvore_h
 
+#include "bitmap.h"
+
 typedef struct arv Arvore;
 
 //cria uma árvore com a informação do nó raiz c, e com subárvore esquerda e e subárvore direita d
@@ -37,5 +39,13 @@ void atualizaFrequencia(Arvore *arv, int freq);
 char getCaractere(Arvore *arvore);
 
 int getFrequencia(Arvore *arv);
+
+char** preencheTabelaHuffman(Arvore *arvIdeal, char **tabela, char *codigoAtual);
+
+void escreveCabecalho(Arvore *arv, bitmap *bm);
+
+void decodificaArvore(Arvore *arv, bitmap *bm, FILE *saida);
+
+Arvore* reconstroiArvore(bitmap* bm, int* pos);
 
 #endif 

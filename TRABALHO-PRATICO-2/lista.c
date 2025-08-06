@@ -5,6 +5,7 @@
 #include "lista.h"
 #include "arvore.h"
 
+#define tam_ASCII 256
 
 struct lista{
     Arvore *arv;
@@ -141,6 +142,10 @@ Lista *obtemListaIdeal(Lista *l){
     l = insereArvoreNaLista(l, nova);
 
     return obtemListaIdeal(l);
+}
+
+Arvore *getArvore(Lista *l){
+    return l->arv;
 }
 
 Arvore *buscaArvore(Lista *l, char caractere){

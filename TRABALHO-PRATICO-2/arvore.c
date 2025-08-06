@@ -2,6 +2,8 @@
 
 #include<stdio.h>
 #include<stdlib.h>  
+#include <string.h>
+#include "bitmap.h"
 
 typedef struct arv Arvore;
 
@@ -119,6 +121,13 @@ int altura(Arvore* a){
     }
 }
 
+int ehFolha(Arvore *a){
+    if (a->dir == NULL && a->esq == NULL){
+        return 1;
+    }
+    return 0;
+}
+
 void atualizaFrequencia(Arvore *arv, int freq){
     arv->frequencia = freq;
 }
@@ -129,4 +138,85 @@ char getCaractere(Arvore *arvore){
 
 int getFrequencia(Arvore *arv){
     return arv->frequencia;
+}
+
+char** preencheTabelaHuffman(Arvore *arvIdeal, char **tabela, char *codigoAtual) {
+    if (ehFolha(arvIdeal)) {
+        tabela[(unsigned char)arvIdeal->caractere] = strdup(codigoAtual);
+        return tabela;
+    }
+
+    // percorre esquerda com '0'
+    char esq[256], dir[256];
+    strcpy(esq, codigoAtual);
+    strcat(esq, "0");
+
+    strcpy(dir, codigoAtual);
+    strcat(dir, "1");
+
+    //nao eh necessario igualar a tabela a chamada da função pois dentro dela a tabela ja e atualizada por referencia
+    if (arvIdeal->esq)
+        preencheTabelaHuffman(arvIdeal->esq, tabela, esq);
+
+    if (arvIdeal->dir)
+        preencheTabelaHuffman(arvIdeal->dir, tabela, dir);
+
+    return tabela;
+}
+
+void escreveCabecalho(Arvore *arv, bitmap *bm) {
+    if (arv == NULL) return;
+
+    if (ehFolha(arv)) {
+        // Escreve bit '1' indicando que é folha
+        bitmapAppendLeastSignificantBit(bm, 1);
+
+        // Escreve os 8 bits do caractere
+        unsigned char c = getCaractere(arv);
+        for (int i = 7; i >= 0; i--) {
+            unsigned char bit = (c >> i) & 1;
+            bitmapAppendLeastSignificantBit(bm, bit);
+        }
+    } else {
+        // Escreve bit '0' indicando que é nó interno
+        bitmapAppendLeastSignificantBit(bm, 0);
+
+        // Continua a travessia em pré-ordem
+        escreveCabecalho(arv->esq, bm);
+        escreveCabecalho(arv->dir, bm);
+    }
+}
+
+Arvore* reconstroiArvore(bitmap* bm, int* pos) {
+    if (bitmapGetBit(bm, (*pos)++) == 1) {
+        unsigned char c = 0;
+        for (int i = 0; i < 8; i++) {
+            c = (c << 1) | bitmapGetBit(bm, (*pos)++);
+        }
+        return criaArvore(c, NULL, NULL, 0);
+    }
+
+    Arvore* esq = reconstroiArvore(bm, pos);
+    Arvore* dir = reconstroiArvore(bm, pos);
+    return criaArvore('$', esq, dir, 0);
+}
+
+void decodificaArvore(Arvore *arv, bitmap *bm, FILE *saida) {
+    if (!arv || !bm || !saida) return;
+
+    unsigned int pos = 0;
+    Arvore* atual = arv;
+
+    while (pos < bitmapGetLength(bm)) {
+        unsigned char bit = bitmapGetBit(bm, pos++);
+        if (bit == 0)
+            atual = atual->esq;
+        else
+            atual = atual->dir;
+
+        if (ehFolha(atual)) {
+            fputc(getCaractere(atual), saida);
+            atual = arv;
+        }
+    }
 }
