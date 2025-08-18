@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "lista.h"
 #include "arvore.h"
 #include "bitmap.h"
@@ -21,13 +22,14 @@ Lista *preencheListaArvores(char *caminho){
     Lista *lista = criaLista();
 
     while ((byte = fgetc(arq)) != EOF) {
-        vetFrequency[byte]++;
+        unsigned char u = (unsigned char) byte;
+        vetFrequency[u]++;
 
-        if (vetFrequency[byte] == 1){
-            Arvore *arv = criaArvore(byte, NULL, NULL, 0);
+        if (vetFrequency[u] == 1){
+            Arvore *arv = criaArvore(u, NULL, NULL, 1);
             lista = insereArvoreNaLista(lista, arv);
         } else {
-            atualizaFrequencia(buscaArvore(lista, byte), vetFrequency[byte]);
+            atualizaFrequencia(buscaArvore(lista, u), vetFrequency[u]);
         }
         
     }
@@ -38,46 +40,92 @@ Lista *preencheListaArvores(char *caminho){
     return lista;
 }
 
-void escreveBinario(char *caminho, bitmap *bm, char **tabela){
-    char nomeSaida[100];
+void escreveBinario(const char *caminho, bitmap *bmCabecalho, char **tabela){
+    char nomeSaida[512];
     sprintf(nomeSaida, "%s.comp", caminho);
-    FILE *saida = fopen(nomeSaida, "wb");
 
+    FILE *saida = fopen(nomeSaida, "wb");
     if (!saida) {
         perror("Erro ao criar arquivo de saída");
         exit(1);
     }
 
-    // grava o bitmap com o cabeçalho
-    fwrite(bitmapGetContents(bm), sizeof(unsigned char), (bitmapGetLength(bm)+7)/8, saida);
+    fwrite(bitmapGetContents(bmCabecalho),
+           1,
+           (bitmapGetLength(bmCabecalho)+7)/8,
+           saida);
+
+    bitmapLibera(bmCabecalho);
 
     FILE *entrada = fopen(caminho, "rb");
     if (!entrada) {
         perror("Erro ao abrir arquivo de entrada");
+        fclose(saida);
         exit(1);
     }
 
-    // cria um novo bitmap para o conteúdo codificado
     bitmap *bmConteudo = bitmapInit(UM_MEGA);
 
-    int c;
-    while ((c = fgetc(entrada)) != EOF) {
-        char *codigo = tabela[(unsigned char)c];
-        for (int i = 0; codigo[i] != '\0'; i++) {
-            bitmapAppendLeastSignificantBit(bmConteudo, codigo[i] - '0');
+    int ch;
+    while ((ch = fgetc(entrada)) != EOF) {
+        unsigned char u = (unsigned char) ch;
+        const char *codigo = tabela[u];
+        size_t len = strlen(codigo);
+        size_t offset = 0;
+
+        while (len > 0) {
+            unsigned int livre = bitmapGetMaxSize(bmConteudo) - bitmapGetLength(bmConteudo);
+            if (livre == 0) {
+                // bloco cheio -> flush para o arquivo
+                fwrite(bitmapGetContents(bmConteudo),
+                       1,
+                       (bitmapGetLength(bmConteudo)+7)/8,
+                       saida);
+                bitmapLibera(bmConteudo);
+                bmConteudo = bitmapInit(UM_MEGA);
+                livre = bitmapGetMaxSize(bmConteudo);
+            }
+
+            unsigned int escrever = (len < livre) ? (unsigned int)len : livre;
+
+            for (unsigned int i = 0; i < escrever; i++) {
+                bitmapAppendLeastSignificantBit(bmConteudo, codigo[offset + i] - '0');
+            }
+            offset += escrever;
+            len    -= escrever;
         }
     }
 
-    // grava o conteúdo codificado no arquivo de saída
-    fwrite(bitmapGetContents(bmConteudo), sizeof(unsigned char), (bitmapGetLength(bmConteudo)+7)/8, saida);
+    if (bitmapGetLength(bmConteudo) > 0) {
+        fwrite(bitmapGetContents(bmConteudo),
+               1,
+               (bitmapGetLength(bmConteudo)+7)/8,
+               saida);
+    }
 
+    bitmapLibera(bmConteudo);
     fclose(entrada);
     fclose(saida);
-    bitmapLibera(bmConteudo);
-    bitmapLibera(bm);
 }
 
 void Compacta(char *caminho){
+FILE *test = fopen(caminho, "rb");
+    if (!test) {
+        perror("Nao foi possivel abrir o arquivo de entrada");
+        return;
+    }
+    fseek(test, 0, SEEK_END);
+    long tam = ftell(test);
+    fclose(test);
+
+    if (tam == 0) {
+        char nomeSaida[100];
+        sprintf(nomeSaida, "%s.comp", caminho);
+        FILE *saida = fopen(nomeSaida, "wb");
+        if (saida) fclose(saida);
+        return;
+    }
+
     Lista *lista = preencheListaArvores(caminho);
 
     if (!lista){
@@ -93,9 +141,16 @@ void Compacta(char *caminho){
     
     bitmap *bm = bitmapInit(UM_MEGA);
     escreveCabecalho(arvoreIdeal, bm);
+
+    int originalSize = somaFrequenciasLista(lista);
+    
+    // Escreve 32 bits do tamanho original no próprio bitmap de cabeçalho
+    for (int i = 31; i >= 0; --i) {
+        bitmapAppendLeastSignificantBit(bm, (originalSize >> i) & 1);
+    }
+
     escreveBinario(caminho, bm, tabela);
 }
-
 
 int main(int argc, char *argv[]) {
     if (argc <= 1) {

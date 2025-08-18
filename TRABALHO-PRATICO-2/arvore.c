@@ -8,14 +8,14 @@
 typedef struct arv Arvore;
 
 struct arv {
-    char caractere;
+    unsigned char caractere;
     int frequencia;
     Arvore* esq;
     Arvore* dir;
 };
 
 //cria uma árvore com a informação do nó raiz c, e com subárvore esquerda e e subárvore direita d
-Arvore* criaArvore (char c, Arvore* e, Arvore* d, int frequencia){
+Arvore* criaArvore (unsigned char c, Arvore* e, Arvore* d, int frequencia){
     Arvore *arv = (Arvore*) malloc(sizeof(Arvore));
     arv->caractere = c;
     arv->frequencia = frequencia;
@@ -44,7 +44,7 @@ Arvore* liberaArvore (Arvore* a){
 }
 
 //indica a ocorrência (1) ou não (0) do aluno (pela chave de busca mat)
-int arv_pertence (Arvore* a, char caractere){
+int arv_pertence (Arvore* a, unsigned char caractere){
     if (arv_vazia(a)){
         return 0;
     }
@@ -67,7 +67,7 @@ void imprimeArvore (Arvore* a){
     }
 }
 
-Arvore* arv_pai (Arvore* a, char caractere){
+Arvore* arv_pai (Arvore* a, unsigned char caractere){
     if (arv_vazia(a)){
         return NULL;
     }
@@ -132,7 +132,7 @@ void atualizaFrequencia(Arvore *arv, int freq){
     arv->frequencia = freq;
 }
 
-char getCaractere(Arvore *arvore){
+unsigned char getCaractere(Arvore *arvore){
     return arvore->caractere;
 }
 
@@ -142,7 +142,12 @@ int getFrequencia(Arvore *arv){
 
 char** preencheTabelaHuffman(Arvore *arvIdeal, char **tabela, char *codigoAtual) {
     if (ehFolha(arvIdeal)) {
-        tabela[(unsigned char)arvIdeal->caractere] = strdup(codigoAtual);
+        if (codigoAtual[0] == '\0') {
+            // Caso especial: árvore com apenas uma folha
+            tabela[(unsigned char)arvIdeal->caractere] = strdup("0");
+        } else {
+            tabela[(unsigned char)arvIdeal->caractere] = strdup(codigoAtual);
+        }
         return tabela;
     }
 
@@ -187,35 +192,46 @@ void escreveCabecalho(Arvore *arv, bitmap *bm) {
     }
 }
 
-Arvore* reconstroiArvore(bitmap* bm, int* pos) {
+Arvore* reconstroiArvore(bitmap *bm, int *pos) {
     if (bitmapGetBit(bm, (*pos)++) == 1) {
         unsigned char c = 0;
         for (int i = 0; i < 8; i++) {
             c = (c << 1) | bitmapGetBit(bm, (*pos)++);
         }
         return criaArvore(c, NULL, NULL, 0);
+    } else {
+        Arvore* esq = reconstroiArvore(bm, pos);
+        Arvore* dir = reconstroiArvore(bm, pos);
+        return criaArvore('$', esq, dir, 0);
     }
-
-    Arvore* esq = reconstroiArvore(bm, pos);
-    Arvore* dir = reconstroiArvore(bm, pos);
-    return criaArvore('$', esq, dir, 0);
 }
 
-void decodificaArvore(Arvore *arv, bitmap *bm, FILE *saida) {
-    if (!arv || !bm || !saida) return;
 
-    unsigned int pos = 0;
+void decodificaBitmapComArvore(bitmap *bm, int pos, Arvore *arv, FILE *saida, int n) {
+    if (!bm || !arv || !saida) return;
+
+    if (ehFolha(arv)) {
+        for (int i = 0; i < n; ++i) {
+            fputc(getCaractere(arv), saida);
+        }
+        return;
+    }
+
     Arvore* atual = arv;
+    int emitidos = 0;
 
-    while (pos < bitmapGetLength(bm)) {
-        unsigned char bit = bitmapGetBit(bm, pos++);
-        if (bit == 0)
+    while (pos < bitmapGetLength(bm) && emitidos < n) {
+        char bit = bitmapGetBit(bm, pos++);
+        if (bit == 0){
             atual = atual->esq;
-        else
+        }
+        else{
             atual = atual->dir;
+        }
 
         if (ehFolha(atual)) {
             fputc(getCaractere(atual), saida);
+            emitidos++;
             atual = arv;
         }
     }

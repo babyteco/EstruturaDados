@@ -19,8 +19,10 @@ Lista *obtemListaIdeal(Lista *l);
 
 Arvore *getArvore(Lista *l);
 
-Arvore *buscaArvore(Lista *l, char caractere);
+Arvore *buscaArvore(Lista *l,unsigned char caractere);
 
 void liberaLista(Lista *l);
+
+int somaFrequenciasLista(Lista *l);
 
 #endif // Lista

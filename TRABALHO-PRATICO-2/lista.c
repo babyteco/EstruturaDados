@@ -7,6 +7,8 @@
 
 #define tam_ASCII 256
 
+typedef struct lista Lista;
+
 struct lista{
     Arvore *arv;
     Lista *prox;
@@ -148,7 +150,7 @@ Arvore *getArvore(Lista *l){
     return l->arv;
 }
 
-Arvore *buscaArvore(Lista *l, char caractere){
+Arvore *buscaArvore(Lista *l, unsigned char caractere){
     Lista *paliativo = l;
     while (paliativo != NULL){
         if (getCaractere(paliativo->arv) == caractere){
@@ -171,4 +173,12 @@ void liberaLista(Lista *l){
         l = l->prox;
         free(temp);
     }
+}
+
+int somaFrequenciasLista(Lista *l) {
+    unsigned int total = 0;
+    for (Lista *p = l; p != NULL; p = p->prox) {
+        total += getFrequencia(p->arv);
+    }
+    return total;
 }
