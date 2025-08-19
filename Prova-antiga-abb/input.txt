@@ -1,0 +1,1 @@
+exemplo de arquivo de entrada de dados para a prova de estruturas de dados
